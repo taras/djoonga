@@ -6,3 +6,5 @@ eggs/
 html/
 parts/
 joomla.kpf
+debugger
+.installed.cfg
