@@ -1,0 +1,8 @@
+*.pyc
+bin/
+develop-eggs/
+downloads/
+eggs/
+html/
+parts/
+joomla.kpf

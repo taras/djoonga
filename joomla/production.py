@@ -1,0 +1,2 @@
+
+from joomla.settings import *

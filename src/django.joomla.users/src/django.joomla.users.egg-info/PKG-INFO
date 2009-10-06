@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: django.joomla.users
+Version: 0.1dev
+Summary: Django application for administering Joomla Users
+Home-page: http://github.com/taras/django.joomla
+Author: Positive Sum
+Author-email: taras@positivesum.org
+License: BSD License
+Description: UNKNOWN
+Keywords: django joomla
+Platform: UNKNOWN
