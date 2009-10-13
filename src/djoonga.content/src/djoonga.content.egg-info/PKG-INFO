@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: djoonga.content
+Version: 0.1dev
+Summary: Django App to manage Joomla Content (com_content)
+Home-page: http://djoonga.com
+Author: Positive Sum
+Author-email: taras@positivesum.org
+License: BSD License
+Description: UNKNOWN
+Keywords: django joomla
+Platform: UNKNOWN

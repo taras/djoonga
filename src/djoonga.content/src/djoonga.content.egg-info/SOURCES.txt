@@ -1,0 +1,16 @@
+setup.cfg
+setup.py
+src/djoonga/__init__.py
+src/djoonga.content.egg-info/PKG-INFO
+src/djoonga.content.egg-info/SOURCES.txt
+src/djoonga.content.egg-info/dependency_links.txt
+src/djoonga.content.egg-info/entry_points.txt
+src/djoonga.content.egg-info/namespace_packages.txt
+src/djoonga.content.egg-info/not-zip-safe
+src/djoonga.content.egg-info/paster_plugins.txt
+src/djoonga.content.egg-info/top_level.txt
+src/djoonga/content/__init__.py
+src/djoonga/content/admin.py
+src/djoonga/content/models.py
+src/djoonga/content/tests/__init__.py
+src/djoonga/content/tests/test_models.py
