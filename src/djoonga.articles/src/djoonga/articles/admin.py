@@ -6,19 +6,6 @@ from django import forms
 from djoonga.users.models import JoomlaUser
 from django.db.models.query import QuerySet
 
-class MockQuerySet:
-    
-    objects = []
-    
-    def __init__( self, queryset ):
-        self.objects = list(queryset)
-    
-    def insert(self, item):
-        self.objects = [item] + self.objects
-    
-    def all(self):
-        return self.objects
-
 class ArticleAdminForm(forms.ModelForm):
     introtext = forms.CharField(label="Body",widget=forms.Textarea)
     created_by_alias = forms.CharField(label="Author Alias")
@@ -43,23 +30,7 @@ class ArticleAdmin(admin.ModelAdmin):
         if field.name == 'created_by':
             queryset = JoomlaUser.objects.all()
             return forms.ModelChoiceField(
-                queryset=queryset, initial=self.current_user.id)
-        if field.name == 'section':
-            uncategorized = Section(id=0, title='Uncategorized')
-            queryset = Section.objects.all()
-            mockset = MockQuerySet(queryset)
-            mockset.insert(uncategorized)
-            return forms.ModelChoiceField(
-                queryset=mockset, initial=0
-            )
-        if field.name == 'category':
-            uncategorized = Category(id=0, title='Uncategorized')
-            queryset = Category.objects.all()
-            mockset = MockQuerySet(queryset)
-            mockset.insert(uncategorized)
-            return forms.ModelChoiceField(
-                queryset=mockset, initial=0
-            )            
+                queryset=queryset, initial=self.current_user.id)          
         return super(ArticleAdmin, self).formfield_for_dbfield(field, **kwargs)    
 
 class CategoryAdmin(admin.ModelAdmin):
