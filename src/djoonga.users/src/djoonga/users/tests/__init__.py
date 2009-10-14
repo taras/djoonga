@@ -1,0 +1,1 @@
+from djoonga.users.tests.users import UsersTestCase
