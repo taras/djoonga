@@ -17,6 +17,6 @@ src/djoonga/users/admin.py
 src/djoonga/users/models.py
 src/djoonga/users/tests.py
 src/djoonga/users/fixtures/initial_data.json
-src/djoonga/users/middleware/.DS_Store
-src/djoonga/users/middleware/__init__.py
-src/djoonga/users/middleware/threadlocals.py
+src/djoonga/users/tests/__init__.py
+src/djoonga/users/tests/users.py
+src/djoonga/users/tests/fixtures/users.json

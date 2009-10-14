@@ -19,3 +19,5 @@ src/djoonga/articles/admin.py
 src/djoonga/articles/models.py
 src/djoonga/articles/tests.py
 src/djoonga/articles/fixtures/initial_data.json
+src/djoonga/articles/tests/__init__.py
+src/djoonga/articles/tests/fixtures/users.json
