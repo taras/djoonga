@@ -1,10 +1,11 @@
-
 import os
-from joomla.admin.utils import jconfig
+from djoonga.utils import jconfig
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
+
+SITE_ID = 1
 
 MANAGERS = ADMINS
 
@@ -44,7 +45,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 AUTHENTICATION_BACKENDS = (
-    'django.joomla.users.JoomlaAuthenticationBackend',
+    'djoonga.users.JoomlaAuthenticationBackend',
 )
 
 ROOT_URLCONF = 'joomla.urls'
@@ -55,8 +56,8 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.admin',
-    'django.joomla.users',
-    'django.joomla.content'
+    'djoonga.users',
+    'djoonga.articles',
 )
 
 TEMPLATE_LOADERS = (
