@@ -4,8 +4,7 @@ from djoonga.users.models import JoomlaUser
 from django.contrib.auth.models import User as DjangoUser
 from django.db.models.signals import pre_save, post_init
 import logging
-import datetime
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 CONFIRMATION_CHOICES = (
     (0, u'No'),
@@ -79,9 +78,9 @@ class Article(models.Model):
     modified = models.DateTimeField(auto_now=True)
     modified_by = models.ForeignKey(JoomlaUser, related_name='modified', db_column='modified_by', blank=True, null=True, default='0')
     checked_out = models.BooleanField()
-    checked_out_time = models.DateTimeField()
-    publish_up = models.DateTimeField(default=datetime.datetime.now)
-    publish_down = models.DateTimeField(default=datetime.datetime.min)
+    checked_out_time = models.DateTimeField(blank=True, null=True)
+    publish_up = models.DateTimeField(blank=True, null=True)
+    publish_down = models.DateTimeField(blank=True, null=True)
     images = models.TextField(blank=True)
     urls = models.TextField(blank=True)
     attribs = models.TextField(blank=True)
