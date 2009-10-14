@@ -1,5 +1,9 @@
+.DS_Store
+__init__.py
 setup.cfg
 setup.py
+src/.DS_Store
+src/djoonga/.DS_Store
 src/djoonga/__init__.py
 src/djoonga.articles.egg-info/PKG-INFO
 src/djoonga.articles.egg-info/SOURCES.txt
@@ -13,3 +17,5 @@ src/djoonga.articles.egg-info/top_level.txt
 src/djoonga/articles/__init__.py
 src/djoonga/articles/admin.py
 src/djoonga/articles/models.py
+src/djoonga/articles/tests.py
+src/djoonga/articles/fixtures/initial_data.json

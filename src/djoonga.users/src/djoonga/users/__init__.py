@@ -1,7 +1,8 @@
 import subprocess, os, logging
 
-from djoonga.users.models import User as JoomlaUser
-from django.contrib.auth.models import User
+from djoonga.users.models import JoomlaUser
+from djoonga.users.models import UserReference
+from django.contrib.auth.models import User as DjangoUser
 from django.conf import settings
 
 class JoomlaAuthenticationBackend:
@@ -28,19 +29,22 @@ class JoomlaAuthenticationBackend:
             return None
         
         try:
-            django_user = User.objects.get(username__exact=username)
-        except User.DoesNotExist:
-            django_user = User.objects.create_user(username, joomla_user.email, '')
+            django_user = DjangoUser.objects.get(username__exact=username)
+        except DjangoUser.DoesNotExist:
+            django_user = DjangoUser.objects.create_user(username, joomla_user.email, '')
             django_user.set_unusable_password()
             django_user.is_superuser = joomla_user.usertype == 'Super Administrator'
             django_user.is_staff = joomla_user.usertype == 'Super Administrator'
-            django_user.is_active = True
+            django_user.is_active = not joomla_user.block
             django_user.save()
+            
+            reference = UserReference(django=django_user, joomla=joomla_user)
+            reference.save()
             
         return django_user
     
     def get_user(self, user_id):
         try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
+            return DjangoUser.objects.get(pk=user_id)
+        except DjangoUser.DoesNotExist:
             return None

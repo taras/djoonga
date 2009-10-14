@@ -1,8 +1,7 @@
 from django.db import models
 from djoonga.utils import jconfig
-from djoonga.users.models import User
+from djoonga.users.models import JoomlaUser
 from django.contrib.auth.models import User as DjangoUser
-from djoonga.users.middleware import threadlocals
 from django.db.models.signals import pre_save, post_init
 import logging
 import datetime
@@ -75,10 +74,10 @@ class Article(models.Model):
     mask = models.IntegerField(blank=True, default='0')
     category = models.ForeignKey(Category, db_column='catid', blank=True, null=True, default='0')
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='created', db_column='created_by')
+    created_by = models.ForeignKey(JoomlaUser, related_name='created', db_column='created_by')
     created_by_alias = models.CharField(max_length=765, blank=True)
     modified = models.DateTimeField(auto_now=True)
-    modified_by = models.ForeignKey(User, related_name='modified', db_column='modified_by', blank=True, null=True, default='0')
+    modified_by = models.ForeignKey(JoomlaUser, related_name='modified', db_column='modified_by', blank=True, null=True, default='0')
     checked_out = models.BooleanField()
     checked_out_time = models.DateTimeField()
     publish_up = models.DateTimeField(default=datetime.datetime.now)

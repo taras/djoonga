@@ -1,3 +1,4 @@
+__init__.py
 setup.cfg
 setup.py
 src/djoonga/__init__.py

@@ -3,7 +3,7 @@ from models import Article, Section, Category, Rating, FrontpageContent
 from django import forms
 from django.db import models
 from django import forms
-from djoonga.users.models import User
+from djoonga.users.models import JoomlaUser
 from django.db.models.query import QuerySet
 
 class MockQuerySet:
@@ -41,7 +41,7 @@ class ArticleAdmin(admin.ModelAdmin):
     def formfield_for_dbfield(self, field, **kwargs):
         current_user = self.current_user
         if field.name == 'created_by':
-            queryset = User.objects.all()
+            queryset = JoomlaUser.objects.all()
             return forms.ModelChoiceField(
                 queryset=queryset, initial=self.current_user.id)
         if field.name == 'section':
