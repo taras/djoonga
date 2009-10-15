@@ -3,6 +3,10 @@ from joomla.settings import *
 DEBUG=True
 TEMPLATE_DEBUG=DEBUG
 
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
+
 MIDDLEWARE_CLASSES += (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )

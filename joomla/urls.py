@@ -12,6 +12,10 @@ urlpatterns = patterns(
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
 )
 
+urlpatterns += patterns('',
+    (r'^article/', include('djoonga.articles.urls')),
+)
+
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^media/(?P<path>.*)$', 'django.views.static.serve', 

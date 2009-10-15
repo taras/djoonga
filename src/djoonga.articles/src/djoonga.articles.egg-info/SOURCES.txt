@@ -17,7 +17,8 @@ src/djoonga.articles.egg-info/top_level.txt
 src/djoonga/articles/__init__.py
 src/djoonga/articles/admin.py
 src/djoonga/articles/models.py
-src/djoonga/articles/tests.py
-src/djoonga/articles/fixtures/initial_data.json
+src/djoonga/articles/migrations/0001_article.py
+src/djoonga/articles/migrations/0002_set_allow_null_for_dates.py
+src/djoonga/articles/migrations/__init__.py
 src/djoonga/articles/tests/__init__.py
 src/djoonga/articles/tests/fixtures/users.json
