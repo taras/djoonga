@@ -15,8 +15,6 @@ src/djoonga.users.egg-info/top_level.txt
 src/djoonga/users/__init__.py
 src/djoonga/users/admin.py
 src/djoonga/users/models.py
-src/djoonga/users/tests.py
-src/djoonga/users/fixtures/initial_data.json
 src/djoonga/users/tests/__init__.py
 src/djoonga/users/tests/users.py
 src/djoonga/users/tests/fixtures/users.json

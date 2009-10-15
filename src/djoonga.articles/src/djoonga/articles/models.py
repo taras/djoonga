@@ -9,6 +9,7 @@ from datetime import timedelta, datetime
 CONFIRMATION_CHOICES = (
     (0, u'No'),
     (1, u'Yes'),
+    (-1, u'Archived'),
 )
 
 def get_default_attribs():
@@ -73,7 +74,7 @@ class Article(models.Model):
     mask = models.IntegerField(blank=True, default='0')
     category = models.ForeignKey(Category, db_column='catid', blank=True, null=True, default='0')
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(JoomlaUser, related_name='created', db_column='created_by')
+    created_by = models.ForeignKey(JoomlaUser, verbose_name='Author', related_name='created', db_column='created_by')
     created_by_alias = models.CharField(max_length=765, blank=True)
     modified = models.DateTimeField(auto_now=True)
     modified_by = models.ForeignKey(JoomlaUser, related_name='modified', db_column='modified_by', blank=True, null=True, default='0')
