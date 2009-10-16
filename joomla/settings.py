@@ -57,6 +57,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'djoonga.users',
     'djoonga.articles',
+    'djoonga.categories'
 )
 
 TEMPLATE_LOADERS = (
@@ -69,3 +70,5 @@ TEMPLATE_DIRS = (
 )
 
 JOOMLA_SITEPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')), 'html')
+DJOONGA_CATEGORY_MODEL = ('categories', 'category')
+DJOONGA_SECTION_MODEL = ('categories', 'section')
