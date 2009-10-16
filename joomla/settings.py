@@ -57,7 +57,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'djoonga.users',
     'djoonga.articles',
-    'djoonga.categories'
+    'djoonga.categories',
 )
 
 TEMPLATE_LOADERS = (

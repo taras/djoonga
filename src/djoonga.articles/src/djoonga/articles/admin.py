@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Article, Section, Category, Rating, FrontpageContent
+from models import Article, Rating, FrontpageContent
 from django import forms
 from django.db import models
 from django import forms
@@ -9,6 +9,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from djoonga.categories.models import Section, Category
 
 def make_published(modelAdmin, request, queryset):
     queryset.update(state=1)
@@ -63,17 +64,6 @@ class ArticleAdmin(admin.ModelAdmin):
             queryset = JoomlaUser.objects.all()
             return forms.ModelChoiceField(
                 queryset=queryset, initial=self.current_user.id)          
-        return super(ArticleAdmin, self).formfield_for_dbfield(field, **kwargs)    
-
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'ordering', 'access', 'section', )
-    list_filter = ('section',)
-    search_fields = ['title', 'description']
-
-class SectionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'ordering', 'access',)
-    search_fields = ['title', 'description']
+        return super(ArticleAdmin, self).formfield_for_dbfield(field, **kwargs)
 
 admin.site.register(Article, ArticleAdmin)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Section, SectionAdmin)
