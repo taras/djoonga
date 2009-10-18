@@ -13,8 +13,11 @@ class JoomlaAuthenticationBackend:
         except JUser.DoesNotExist:
             return None
         
-        # check if user is blocked
-        if joomla_user.block:
+        is_active = not joomla_user.block
+        is_staff = joomla_user.gid >= 19
+        is_superuser = joomla_user.gid == 25
+        
+        if not ( is_active and is_staff ):
             return None
         
         crypt, salt = joomla_user.password.split(':')
@@ -22,8 +25,6 @@ class JoomlaAuthenticationBackend:
         cmd = ['php', '-r', "include('%s'); echo JUserHelper::getCryptedPassword('%s','%s');"%(helper, password, salt)]
         s = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         testcrypt, error = s.communicate()
-        if error:
-            logging.debug(error)
 
         # check if the entered password matches joomla user's password
         if crypt != testcrypt:
@@ -34,9 +35,9 @@ class JoomlaAuthenticationBackend:
         except User.DoesNotExist:
             django_user = User.objects.create_user(username, joomla_user.email, '')
             django_user.set_unusable_password()
-            django_user.is_superuser = joomla_user.gid == 25
-            django_user.is_staff = joomla_user.gid >= 23
-            django_user.is_active = not joomla_user.block
+            django_user.is_superuser = is_superuser
+            django_user.is_staff = is_staff
+            django_user.is_active = is_active
             django_user.save()
             
             reference = UserReference(django=django_user, joomla=joomla_user)
