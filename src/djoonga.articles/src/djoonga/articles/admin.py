@@ -1,15 +1,14 @@
 from django.contrib import admin
-from models import Article, Rating, FrontpageContent
 from django import forms
 from django.db import models
-from django import forms
-from djoonga.users.models import JoomlaUser
-from django.db.models.query import QuerySet
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from djoonga.categories.models import Section, Category
+
+from djoonga.users.models import JUser
+from models import JArticle, JRating, JFrontpage
+from djoonga.categories.models import JSection, JCategory
 
 def make_published(modelAdmin, request, queryset):
     queryset.update(state=1)
@@ -33,7 +32,7 @@ class ArticleAdminForm(forms.ModelForm):
     introtext = forms.CharField(label="Body",widget=forms.Textarea)
     created_by_alias = forms.CharField(label="Author Alias")
     class Meta:
-        model = Article
+        model = JArticle
 
 class ArticleAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'alias' : ['title'] }
@@ -61,9 +60,9 @@ class ArticleAdmin(admin.ModelAdmin):
     def formfield_for_dbfield(self, field, **kwargs):
         current_user = self.current_user
         if field.name == 'created_by':
-            queryset = JoomlaUser.objects.all()
+            queryset = JUser.objects.all()
             return forms.ModelChoiceField(
                 queryset=queryset, initial=self.current_user.id)          
         return super(ArticleAdmin, self).formfield_for_dbfield(field, **kwargs)
 
-admin.site.register(Article, ArticleAdmin)
+admin.site.register(JArticle, ArticleAdmin)

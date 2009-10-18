@@ -1,4 +1,4 @@
-from models import Article, Section, Category, Rating, FrontpageContent
+from models import JArticle, JRating, JFrontpage
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.admin.views.decorators import staff_member_required

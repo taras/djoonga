@@ -1,15 +1,16 @@
-import subprocess, os, logging
-
-from djoonga.users.models import JoomlaUser
-from djoonga.users.models import UserReference
-from django.contrib.auth.models import User as DjangoUser
+import os
+import subprocess
+from django.contrib.auth.models import User
 from django.conf import settings
+
+from djoonga.users.models import JUser
+from djoonga.users.models import UserReference
 
 class JoomlaAuthenticationBackend:
     def authenticate(self, username=None, password=None):
         try:
-            joomla_user = JoomlaUser.objects.get(username=username)
-        except JoomlaUser.DoesNotExist:
+            joomla_user = JUser.objects.get(username=username)
+        except JUser.DoesNotExist:
             return None
         
         # check if user is blocked
@@ -29,12 +30,12 @@ class JoomlaAuthenticationBackend:
             return None
         
         try:
-            django_user = DjangoUser.objects.get(username__exact=username)
-        except DjangoUser.DoesNotExist:
-            django_user = DjangoUser.objects.create_user(username, joomla_user.email, '')
+            django_user = User.objects.get(username__exact=username)
+        except User.DoesNotExist:
+            django_user = User.objects.create_user(username, joomla_user.email, '')
             django_user.set_unusable_password()
-            django_user.is_superuser = joomla_user.usertype == 'Super Administrator'
-            django_user.is_staff = joomla_user.usertype == 'Super Administrator'
+            django_user.is_superuser = joomla_user.gid == 25
+            django_user.is_staff = joomla_user.gid >= 23
             django_user.is_active = not joomla_user.block
             django_user.save()
             
@@ -45,6 +46,6 @@ class JoomlaAuthenticationBackend:
     
     def get_user(self, user_id):
         try:
-            return DjangoUser.objects.get(pk=user_id)
-        except DjangoUser.DoesNotExist:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
             return None

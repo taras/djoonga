@@ -1,1 +1,131 @@
-[{"pk": 0, "model": "users.group", "fields": {"name": "Public"}}, {"pk": 1, "model": "users.group", "fields": {"name": "Registered"}}, {"pk": 2, "model": "users.group", "fields": {"name": "Special"}}, {"pk": 62, "model": "users.joomlauser", "fields": {"username": "admin", "registerdate": "2009-10-08 14:54:07", "name": "Administrator", "sendemail": 1, "lastvisitdate": "2009-10-13 04:28:47", "activation": "", "usertype": "Super Administrator", "gid": 25, "params": "", "password": "e1751bdd036a0bd94019647752e3f82c:TxiDxJ0wC1HqQQLyrqd2sE46UtIrjkkh", "email": "admin@example.com", "block": 0}}]
+[
+    {
+        "pk": 0, 
+        "model": "users.jgroup", 
+        "fields": {
+            "name": "Public"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "users.jgroup", 
+        "fields": {
+            "name": "Registered"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "users.jgroup", 
+        "fields": {
+            "name": "Special"
+        }
+    }, 
+    {
+        "pk": 62, 
+        "model": "users.juser", 
+        "fields": {
+            "username": "admin", 
+            "registerdate": "2009-10-08 14:54:07", 
+            "name": "Super Administrator", 
+            "sendemail": 1, 
+            "lastvisitdate": "2009-10-18 12:05:44", 
+            "activation": "", 
+            "usertype": "Super Administrator", 
+            "gid": 25, 
+            "params": "admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=0\n\n", 
+            "password": "e1751bdd036a0bd94019647752e3f82c:TxiDxJ0wC1HqQQLyrqd2sE46UtIrjkkh", 
+            "email": "admin@example.com", 
+            "block": 0
+        }
+    }, 
+    {
+        "pk": 63, 
+        "model": "users.juser", 
+        "fields": {
+            "username": "author", 
+            "registerdate": "2009-10-18 03:16:28", 
+            "name": "Author", 
+            "sendemail": 0, 
+            "lastvisitdate": null, 
+            "activation": "", 
+            "usertype": "Author", 
+            "gid": 19, 
+            "params": "admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=0\n\n", 
+            "password": "710db6d4fbb701ece599824b0c967538:t24lht4OXeDH3OZZmJzRtxSdwK3KWlAb", 
+            "email": "author@example.com", 
+            "block": 0
+        }
+    }, 
+    {
+        "pk": 64, 
+        "model": "users.juser", 
+        "fields": {
+            "username": "editor", 
+            "registerdate": "2009-10-18 04:13:42", 
+            "name": "Editor", 
+            "sendemail": 0, 
+            "lastvisitdate": null, 
+            "activation": "", 
+            "usertype": "Editor", 
+            "gid": 20, 
+            "params": "admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=0\n\n", 
+            "password": "cc47886a141a293073dbaba41a95df72:P5ceJWhD8Q18PUrqrDPPka3nsjh7RQCw", 
+            "email": "editor@example.com", 
+            "block": 0
+        }
+    }, 
+    {
+        "pk": 65, 
+        "model": "users.juser", 
+        "fields": {
+            "username": "publisher", 
+            "registerdate": "2009-10-18 04:14:02", 
+            "name": "Publisher", 
+            "sendemail": 0, 
+            "lastvisitdate": null, 
+            "activation": "", 
+            "usertype": "Publisher", 
+            "gid": 21, 
+            "params": "admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=0\n\n", 
+            "password": "76c00c2e8ee9f1c1379b154102f4bab1:Z3xZwnjVaoLRHxfSjNjcU9PRQn3fjNsX", 
+            "email": "publisher@example.com", 
+            "block": 0
+        }
+    }, 
+    {
+        "pk": 66, 
+        "model": "users.juser", 
+        "fields": {
+            "username": "manager", 
+            "registerdate": "2009-10-18 04:14:17", 
+            "name": "Manager", 
+            "sendemail": 0, 
+            "lastvisitdate": null, 
+            "activation": "", 
+            "usertype": "Manager", 
+            "gid": 23, 
+            "params": "admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=0\n\n", 
+            "password": "70a1d98c182cc7f3cff99a66a292149a:CFyV9kiiqRxJJYIIvlmwtlO0QxXZ4OrS", 
+            "email": "manager@example.com", 
+            "block": 0
+        }
+    }, 
+    {
+        "pk": 67, 
+        "model": "users.juser", 
+        "fields": {
+            "username": "administator", 
+            "registerdate": "2009-10-18 04:14:41", 
+            "name": "Administator", 
+            "sendemail": 0, 
+            "lastvisitdate": null, 
+            "activation": "", 
+            "usertype": "Administrator", 
+            "gid": 24, 
+            "params": "admin_language=\nlanguage=\neditor=\nhelpsite=\ntimezone=0\n\n", 
+            "password": "097453b44adf741a675244bd8677dd73:cYlRnCHp7FjGUPetxk2370iCgYlz0P0L", 
+            "email": "administrator@example.com", 
+            "block": 0
+        }
+    }
+]

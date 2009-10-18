@@ -1,10 +1,11 @@
 import unittest
 import os
 import inspect
-from djoonga.articles.models import Article
 from django.test.client import Client
-from djoonga.users.models import JoomlaUser
 from django.core import management
+
+from djoonga.users.models import JUser
+from djoonga.articles.models import JArticle
 
 class ArticlesTestCase(unittest.TestCase):
     fixtures = ['users.json']
@@ -20,7 +21,7 @@ class ArticlesTestCase(unittest.TestCase):
         '''
         Creating articles
         '''
-        user = JoomlaUser.objects.get(username='admin')
-        article = Article.objects.create(title='Test article', introtext='some text', created_by=user)
+        user = JUser.objects.get(username='admin')
+        article = JArticle.objects.create(title='Test article', introtext='some text', created_by=user)
         
         

@@ -1,9 +1,9 @@
 import unittest
 import os
 import inspect
-from djoonga.users.models import JoomlaUser
+from djoonga.users.models import JUser
 from djoonga.users.models import UserReference
-from django.contrib.auth.models import User as DjangoUser
+from django.contrib.auth.models import User
 from django.test.client import Client
 from django.core import management
 
@@ -17,12 +17,12 @@ class UsersTestCase(unittest.TestCase):
         c.login(username='admin', password='admin')
 
     def testJoomlaAdminUserExists(self):
-        admin = JoomlaUser.objects.get(username='admin')
+        admin = JUser.objects.get(username='admin')
         self.assert_(admin != None)
         self.assert_(admin.id == 62)
         
     def testAdminUserLogin(self):
-        admin = DjangoUser.objects.get(username='admin')
+        admin = User.objects.get(username='admin')
         self.assert_(admin != None)
         self.assert_(admin.username=='admin')
         self.assert_(admin.password=='!')
@@ -30,8 +30,8 @@ class UsersTestCase(unittest.TestCase):
         self.assert_(admin.is_active)
         
     def testUserCrossReference(self):
-        joomla_user = JoomlaUser.objects.get(username='admin')
-        django_user = DjangoUser.objects.get(username='admin')
+        joomla_user = JUser.objects.get(username='admin')
+        django_user = User.objects.get(username='admin')
         
         reference = UserReference.objects.get(joomla=joomla_user, django=django_user)
         self.assert_(isinstance(reference, UserReference))

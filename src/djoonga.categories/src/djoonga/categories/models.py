@@ -1,7 +1,7 @@
 from django.db import models
 from djoonga.utils import jconfig
 
-class Section(models.Model):
+class JSection(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=765)
     name = models.CharField(max_length=765)
@@ -20,11 +20,12 @@ class Section(models.Model):
 
     class Meta:
         db_table = u'%ssections'%jconfig('dbprefix')
+        verbose_name = 'Joomla Section'
 
     def __unicode__(self):
         return self.title
 
-class Category(models.Model):
+class JCategory(models.Model):
     id = models.IntegerField(primary_key=True)
     parent_id = models.IntegerField()
     title = models.CharField(max_length=765)
@@ -45,6 +46,7 @@ class Category(models.Model):
 
     class Meta:
         db_table = u'%scategories'%jconfig('dbprefix')
+        verbose_name = 'Joomla Category'
     
     def __unicode__(self):
         return self.title

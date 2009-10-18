@@ -1,11 +1,10 @@
 from django.db import models
 from djoonga.utils import jconfig
-from djoonga.users.models import JoomlaUser
-from django.contrib.auth.models import User as DjangoUser
+from djoonga.users.models import JUser
+from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_init
-import logging
 from datetime import timedelta, datetime
-from djoonga.categories.models import Section, Category
+from djoonga.categories.models import JSection, JCategory
 
 CONFIRMATION_CHOICES = (
     (0, u'No'),
@@ -16,21 +15,21 @@ CONFIRMATION_CHOICES = (
 def get_default_attribs():
     return 0
 
-class Article(models.Model):
+class JArticle(models.Model):
     title = models.CharField(max_length=765)
     alias = models.SlugField(blank=True)
     title_alias = models.CharField(max_length=765, blank=True)
     introtext = models.TextField()
     fulltext = models.TextField()
     state = models.IntegerField(verbose_name='Published', choices=CONFIRMATION_CHOICES, default=1)
-    section = models.ForeignKey(Section, db_column='sectionid', blank=True, null=True, default='0')
+    section = models.ForeignKey(JSection, db_column='sectionid', blank=True, null=True, default='0')
     mask = models.IntegerField(blank=True, default='0')
-    category = models.ForeignKey(Category, db_column='catid', blank=True, null=True, default='0')
+    category = models.ForeignKey(JCategory, db_column='catid', blank=True, null=True, default='0')
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(JoomlaUser, verbose_name='Author', related_name='created', db_column='created_by')
+    created_by = models.ForeignKey(JUser, verbose_name='Author', related_name='created', db_column='created_by')
     created_by_alias = models.CharField(max_length=765, blank=True)
     modified = models.DateTimeField(auto_now=True)
-    modified_by = models.ForeignKey(JoomlaUser, related_name='modified', db_column='modified_by', blank=True, null=True, default='0')
+    modified_by = models.ForeignKey(JUser, related_name='modified', db_column='modified_by', blank=True, null=True, default='0')
     checked_out = models.BooleanField()
     checked_out_time = models.DateTimeField(blank=True, null=True)
     publish_up = models.DateTimeField(blank=True, null=True)
@@ -48,18 +47,19 @@ class Article(models.Model):
     metadata = models.TextField(default='none')
     class Meta:
         db_table = u'%scontent'%jconfig('dbprefix')
+        verbose_name = 'Joomla Articles'
 
     def __unicode__(self):
         return self.title
     
-class FrontpageContent(models.Model):
-    article = models.ForeignKey(Article, db_column='content_id', primary_key=True)
+class JFrontpage(models.Model):
+    article = models.ForeignKey(JArticle, db_column='content_id', primary_key=True)
     ordering = models.IntegerField()
     class Meta:
         db_table = u'%scontent_frontpage'%jconfig('dbprefix')
 
-class Rating(models.Model):
-    article = models.ForeignKey(Article, db_column='article_id', primary_key=True)
+class JRating(models.Model):
+    article = models.ForeignKey(JArticle, db_column='article_id', primary_key=True)
     rating_sum = models.IntegerField()
     rating_count = models.IntegerField()
     lastip = models.CharField(max_length=150)
@@ -85,11 +85,8 @@ def pre_save_article(sender, **kwargs):
     
     # split introtext and fulltext
     if '<hr id="system-readmore" />' in article.introtext:
-        try:
-            blank = ''
-            article.introtext, blank, article.fulltext = article.introtext.partition('<hr id="system-readmore" />')
-        except Exception, e:
-            logging.debug('Error occured trying to split body into introtext and fulltext: %s'%str(e))
+        blank = ''
+        article.introtext, blank, article.fulltext = article.introtext.partition('<hr id="system-readmore" />')
     
     #Assign 0 to blank Section id
     if hasattr(article, 'section_id') and not article.section_id:
@@ -101,5 +98,5 @@ def pre_save_article(sender, **kwargs):
     if hasattr(article, 'modified_by_id') and not article.modified_by_id:
         article.modified_by_id = 0
     
-post_init.connect(post_init_article, sender=Article)
-pre_save.connect(pre_save_article, sender=Article)
+post_init.connect(post_init_article, sender=JArticle)
+pre_save.connect(pre_save_article, sender=JArticle)
