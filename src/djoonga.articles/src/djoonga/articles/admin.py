@@ -9,8 +9,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.forms import widgets, Field
-from django.forms.widgets import Select
+from django.forms import widgets
 from django.utils.encoding import force_unicode
 from itertools import chain
 from django.utils.html import escape, conditional_escape
@@ -33,7 +32,7 @@ def move_items(modeladmin, request, queryset):
     return HttpResponseRedirect(reverse('djoonga.articles.views.move', args=(ct.pk,)))
 move_items.short_description = "Move selected items"
 
-class CategorySelect(Select):
+class CategorySelect(widgets.Select):
     def render_options(self, choices, selected_choices):
         def render_option(option_value, option_label, attrs):
             option_value = force_unicode(option_value)
@@ -62,16 +61,17 @@ class CategorySelect(Select):
                     option_attrs))
         return u'\n'.join(output)
 
+
+def get_sections():
+    sections = [(0, 'Uncategorized')]
+    sections += [(section.id, section.name) for section in Section.objects.all()]
+    return sections
+
 class ArticleAdminForm(forms.ModelForm):
     introtext = forms.CharField(label="Body",widget=forms.Textarea)
     created_by_alias = forms.CharField(label="Author Alias")
-    section = CategorySelect(choices=(
-        (1, "option 1", {"label": "label 1"}),
-        (2, "option 2", {"label": "label 2"}),
-    ))
-    
-    #section = forms.ChoiceField(widget = forms.Select(), 
-    #               choices = ([('1','1'), ('2','2'),('3','3'), ]), initial='3', required = True,)
+    section = forms.ModelChoiceField(Section.objects, empty_label='Uncategorized')
+    category = forms.ModelChoiceField(Category.objects, empty_label='Uncategorized')
     
     class Meta:
         model = Article
