@@ -48,7 +48,7 @@ AUTHENTICATION_BACKENDS = (
     'djoonga.users.JoomlaAuthenticationBackend',
 )
 
-ROOT_URLCONF = ('joomla.urls')
+ROOT_URLCONF = ('joomla.urls'   )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
