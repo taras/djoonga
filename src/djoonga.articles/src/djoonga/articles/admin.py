@@ -61,6 +61,10 @@ class CategorySelect(Widget):
             selected_html = (option_value in selected_choices) and u' selected="selected"' or ''
             if option_value:
                 option_section = Section.objects.filter(id=Category.objects.filter(id=option_value).values('section')).values_list('title')
+                if len(option_section):
+                    option_section = option_section[0]
+                    if len(option_section):
+                        option_section = option_section[0]
             else:
                 option_section = None
             return u'<option tag="%s" value="%s"%s>%s</option>' % (
