@@ -60,8 +60,7 @@ class CategorySelect(Widget):
             option_value = force_unicode(option_value)
             selected_html = (option_value in selected_choices) and u' selected="selected"' or ''
             if option_value:
-                option_section_tuple = Section.objects.filter(id=Category.objects.filter(id=option_value).values('section')).values_list('title')
-                option_section = list(list(option_section_tuple).pop(0)).pop(0)
+                option_section = Section.objects.filter(id=Category.objects.filter(id=option_value).values('section')).values_list('title')
             else:
                 option_section = None
             return u'<option tag="%s" value="%s"%s>%s</option>' % (
