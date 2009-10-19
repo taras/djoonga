@@ -5,7 +5,12 @@ from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-
+from django.forms.widgets import Widget
+from django.forms.util import flatatt
+from django.utils.encoding import StrAndUnicode, force_unicode
+from django.utils.safestring import mark_safe
+from django.utils.html import escape, conditional_escape
+from django.utils import simplejson as json
 from djoonga.users.models import JUser
 from models import JArticle, JRating, JFrontpage
 from djoonga.categories.models import JSection, JCategory
@@ -28,9 +33,74 @@ def move_items(modeladmin, request, queryset):
     return HttpResponseRedirect(reverse('djoonga.articles.views.move', args=(ct.pk,)))
 move_items.short_description = "Move selected items"
 
+class CategoryTreeWidget(Widget):
+
+    class Media:
+        css = { 'screen': ('jquery.treeview.css',) }
+        js = ('jquery.js', 'jquery.treeview.js')
+    
+    def __init__(self, attrs=None):
+        super(CategoryTreeWidget, self).__init__(attrs)
+    
+    def render(self, name, data, attrs=None):
+        def render_categories(section_id):
+            categories = JCategory.objects.filter(section=section_id)
+            if categories:
+                output = [u'<ul>']
+                for category in categories:
+                    output.append(u'<li><span rel="%s-%s">%s</span></li>' % (
+                        section_id, category.id, category.title))
+                output.append(u'</ul>')
+                return u'\n'.join(output)
+            return u''
+                
+        sections = JSection.objects.all()
+        output = ['''
+        <style type="text/css">
+            #browser {
+              font-family: Verdana, helvetica, arial, sans-serif;
+              font-size: 68.75%;
+            }
+            #browser ul li{
+                list-style-type: none;
+                cursor: pointer;
+            }
+            #browser li{
+                list-style-type: none;
+            }
+            #browser ul {
+                margin-left: 0px;
+                padding-left: 0px;
+            }
+            </style>
+        <script>
+            $(document).ready(function(){
+                $("#browser").treeview({
+                    animated: "fast"
+                });
+              
+            $("#browser li li span").click(function () {
+                rel = $(this).attr('rel');
+                ids = rel.split('-');
+                $('#id_section').attr('value', ids[0]);
+                $('#id_category').attr('value', ids[1]);
+            });
+            
+            });
+        </script>
+        ''']
+        output.append(u'<ul id="browser" class="filetree" class="treeview">')
+        for section in sections:
+            output.append(u'<li><span class="folder">%s</span>'%section.title)
+            output.append(render_categories(section.id))
+            output.append(u'</li>')
+        output.append('</ul><input type="hidden" name="id_section" value="" id="id_section" /><input type="hidden" name="id_category" value="" id="id_category" />')
+        return mark_safe(u'\n'.join(output))
+        
 class ArticleAdminForm(forms.ModelForm):
     introtext = forms.CharField(label="Body",widget=forms.Textarea)
     created_by_alias = forms.CharField(label="Author Alias")
+    section = forms.CharField(label='Section/Category', widget=CategoryTreeWidget)
     class Meta:
         model = JArticle
 

@@ -47,8 +47,9 @@ class JArticle(models.Model):
     metadata = models.TextField(default='none')
     class Meta:
         db_table = u'%scontent'%jconfig('dbprefix')
-        verbose_name = 'Joomla Articles'
-
+        verbose_name = 'Joomla Article'
+        verbose_name_plural = 'Joomla Articles'
+    
     def __unicode__(self):
         return self.title
     
