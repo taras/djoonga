@@ -13,6 +13,11 @@ from django.forms import widgets
 from django.utils.encoding import force_unicode
 from itertools import chain
 from django.utils.html import escape, conditional_escape
+from django.forms.widgets import Widget
+from django.forms.util import flatatt
+from django.utils.encoding import StrAndUnicode, force_unicode
+from django.utils.safestring import mark_safe
+from django.utils.html import escape, conditional_escape
 
 def make_published(modelAdmin, request, queryset):
     queryset.update(state=1)
@@ -32,46 +37,54 @@ def move_items(modeladmin, request, queryset):
     return HttpResponseRedirect(reverse('djoonga.articles.views.move', args=(ct.pk,)))
 move_items.short_description = "Move selected items"
 
-class CategorySelect(widgets.Select):
+class CategorySelect(Widget):
+    def __init__(self, attrs=None, choices=()):
+        super(CategorySelect, self).__init__(attrs)
+        # choices can be any iterable, but we may need to render this widget
+        # multiple times. Thus, collapse it into a list so it can be consumed
+        # more than once.
+        self.choices = list(choices)
+
+    def render(self, name, value, attrs=None, choices=()):
+        if value is None: value = ''
+        final_attrs = self.build_attrs(attrs, name=name)
+        output = [u'<select%s>' % flatatt(final_attrs)]
+        options = self.render_options(choices, [value])
+        if options:
+            output.append(options)
+        output.append('</select>')
+        return mark_safe(u'\n'.join(output))
+
     def render_options(self, choices, selected_choices):
-        def render_option(option_value, option_label, attrs):
+        def render_option(option_value, option_label):
             option_value = force_unicode(option_value)
             selected_html = (option_value in selected_choices) and u' selected="selected"' or ''
-            attrs_html = []
-            for k, v in attrs.items():
-                attrs_html.append('%s="%s"' % (k, escape(v)))
-            if attrs_html:
-                attrs_html = " " + " ".join(attrs_html)
+            if option_value:
+                option_section_tuple = Section.objects.filter(id=Category.objects.filter(id=option_value).values('section')).values_list('title')
+                option_section = list(list(option_section_tuple).pop(0)).pop(0)
             else:
-                attrs_html = ""
-            return u'<option value="%s"%s%s>%s</option>' % (
-                escape(option_value), selected_html, attrs_html,
+                option_section = None
+            return u'<option tag="%s" value="%s"%s>%s</option>' % (
+                option_section, escape(option_value), selected_html,
                 conditional_escape(force_unicode(option_label)))
         # Normalize to strings.
         selected_choices = set([force_unicode(v) for v in selected_choices])
         output = []
-        for option_value, option_label, option_attrs in chain(self.choices, choices):
+        for option_value, option_label in chain(self.choices, choices):
             if isinstance(option_label, (list, tuple)):
                 output.append(u'<optgroup label="%s">' % escape(force_unicode(option_value)))
                 for option in option_label:
                     output.append(render_option(*option))
                 output.append(u'</optgroup>')
             else:
-                output.append(render_option(option_value, option_label,
-                    option_attrs))
+                output.append(render_option(option_value, option_label))
         return u'\n'.join(output)
-
-
-def get_sections():
-    sections = [(0, 'Uncategorized')]
-    sections += [(section.id, section.name) for section in Section.objects.all()]
-    return sections
-
+        
 class ArticleAdminForm(forms.ModelForm):
     introtext = forms.CharField(label="Body",widget=forms.Textarea)
     created_by_alias = forms.CharField(label="Author Alias")
     section = forms.ModelChoiceField(Section.objects, empty_label='Uncategorized')
-    category = forms.ModelChoiceField(Category.objects, empty_label='Uncategorized')
+    category = forms.ModelChoiceField(Category.objects, empty_label='Uncategorized', widget=CategorySelect)
     
     class Meta:
         model = Article
