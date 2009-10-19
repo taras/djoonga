@@ -36,8 +36,8 @@ move_items.short_description = "Move selected items"
 class CategoryTreeWidget(Widget):
 
     class Media:
-        css = { 'screen': ('jquery.treeview.css',) }
-        js = ('jquery.js', 'jquery.treeview.js')
+        css = { 'screen': ('articles/jquery.treeview.css',) }
+        js = ('articles/jquery.js', 'articles/jquery.treeview.js')
     
     def __init__(self, attrs=None):
         super(CategoryTreeWidget, self).__init__(attrs)
@@ -48,7 +48,7 @@ class CategoryTreeWidget(Widget):
             if categories:
                 output = [u'<ul>']
                 for category in categories:
-                    output.append(u'<li><span rel="%s-%s">%s</span></li>' % (
+                    output.append(u'<li><span class="file" rel="%s-%s">%s</span></li>' % (
                         section_id, category.id, category.title))
                 output.append(u'</ul>')
                 return u'\n'.join(output)
@@ -89,7 +89,7 @@ class CategoryTreeWidget(Widget):
             });
         </script>
         ''']
-        output.append(u'<ul id="browser" class="filetree" class="treeview">')
+        output.append(u'<ul id="browser" class="filetree treeview">')
         for section in sections:
             output.append(u'<li><span class="folder">%s</span>'%section.title)
             output.append(render_categories(section.id))
