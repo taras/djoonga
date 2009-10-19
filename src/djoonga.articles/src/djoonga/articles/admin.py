@@ -18,6 +18,7 @@ from django.forms.util import flatatt
 from django.utils.encoding import StrAndUnicode, force_unicode
 from django.utils.safestring import mark_safe
 from django.utils.html import escape, conditional_escape
+from django.utils import simplejson as json
 
 def make_published(modelAdmin, request, queryset):
     queryset.update(state=1)
@@ -36,6 +37,21 @@ def move_items(modeladmin, request, queryset):
     ct = ContentType.objects.get_for_model(queryset.model)
     return HttpResponseRedirect(reverse('djoonga.articles.views.move', args=(ct.pk,)))
 move_items.short_description = "Move selected items"
+
+class SectionJSON(Widget):
+    def __init__(self, attrs=None):
+        super(SectionJSON, self).__init__(attrs)
+    def render(self, name, data, attrs=None):
+        sections = Section.objects.all()
+        d = {}
+        for section in sections:
+            categories = Category.objects.filter(section=section.id)
+            c = []
+            for category in categories:
+                c.append((str(category.id), u'%s'%category.title))
+            d[str(section.id)] = (u'%s'%section.title, c)
+        return mark_safe('''<script type="text/javascript">var category_tree = %s;</script>'''%json.dumps(d)) 
+        
 
 class CategorySelect(Widget):
     def __init__(self, attrs=None, choices=()):
@@ -86,7 +102,7 @@ class CategorySelect(Widget):
 class ArticleAdminForm(forms.ModelForm):
     introtext = forms.CharField(label="Body",widget=forms.Textarea)
     created_by_alias = forms.CharField(label="Author Alias")
-    section = forms.ModelChoiceField(Section.objects, empty_label='Uncategorized')
+    section = forms.CharField(widget=SectionJSON)
     category = forms.ModelChoiceField(Category.objects, empty_label='Uncategorized', widget=CategorySelect)
     
     class Meta:
