@@ -32,8 +32,8 @@ class ArticleAdminForm(forms.ModelForm):
     created_by_alias = forms.CharField(label="Author Alias")
     section_queryset = JSection.objects.all()
     category_queryset = JCategory.objects.all()
-    section = forms.ModelChoiceField(queryset=section_queryset, label='Section/Category', widget=CategoryTreeWidget)
-    category = forms.ModelChoiceField(queryset=category_queryset, label=None, widget=CategoryTreeHiddenWidget)
+    section = forms.ModelChoiceField(queryset=section_queryset, label='Section/Category', widget=CategoryTreeWidget, required=False)
+    category = forms.ModelChoiceField(queryset=category_queryset, label=None, widget=CategoryTreeHiddenWidget, required=False)
     class Meta:
         model = JArticle
         exclude = ('fulltext', 'mask', 'modified_by', 'checked_out',)

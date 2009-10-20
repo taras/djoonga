@@ -31,11 +31,13 @@ class CategoryTreeWidget(Widget):
         js = t.render(c)
         output = [js]
         output.append(u'<ul id="%s" class="filetree treeview">'%name)
-        output.append(u'<li><span class="uncategorized" class="file" rel="0-0">Uncategorized</span></li>')
+        output.append(u'<li><span class="uncategorized" class="file" rel="-">Uncategorized</span></li>')
         for section in sections:
             output.append(u'<li><span class="folder">%s</span>'%section.title)
             output.append(render_categories(section.id))
             output.append(u'</li>')
+        if data == 0:
+            data = ''
         output.append('</ul><input type="hidden" name="section" id="id_section" value="%s" id="id_section" />'%data)
         return mark_safe(u'\n'.join(output))
 
@@ -48,5 +50,7 @@ class CategoryTreeHiddenWidget(HiddenInput):
         super(CategoryTreeHiddenWidget, self).__init__(attrs)
 
     def render(self, name, value, attrs=None, choices=()):
+        if value == 0:
+            value = ''
         output = ['<input class="hidden_tree" type="hidden" name="category" value="%s" id="id_category" />'%value]
         return mark_safe(u'\n'.join(output))

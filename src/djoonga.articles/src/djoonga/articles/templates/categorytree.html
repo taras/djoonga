@@ -26,22 +26,55 @@
 </style>
 <script type="text/javascript">
     $(document).ready(function(){
-        $("#{{ name }}").treeview({
-            animated: "fast"
-        });
-      
+    /* Add Treeview Display to this id - (section) */
+    $("#{{ name }}").treeview({
+        animated: "fast"
+    });
+    
+    /* Call functions to set value to input and highlight entry, when Treeview entry is clicked on */
+    $("#{{ name }} ul li span").click(setvalue);
     $("#{{ name }} ul li span").click(select);
-    $("#{{ name }} li span[rel='0-0']").click(select);
-                                      
-    function select() {
-        $('.highlight').removeClass("highlight");
-        $(this).addClass("highlight");
+    
+    /* Call functions to set value to input and highlight entry, when Uncategorized is clicked on */
+    $("#{{ name }} li span[rel='-']").click(setvalue);
+    $("#{{ name }} li span[rel='-']").click(select);
+    
+    /* Sets value to section and category input fields */
+    function setvalue() {
         rel = $(this).attr('rel');
         ids = rel.split('-');
         $('#id_section').attr('value', ids[0]);
         $('#id_category').attr('value', ids[1]);
+    }
+    
+    /* Sets highlight class to selected Treeview entry */
+    function select(item) {
+        $('.highlight').removeClass("highlight");
+        /* If object is clicked on */
+        $(this).addClass("highlight");
+        /* If object was previously set */
+        if (item){
+            /* If object was previously set to uncategorized */
+            $("#{{ name }} li span[rel="+item+"]").addClass("highlight");
+        }
     };
     
+    /* Gets section and category id of previously set entry */
+    sectionvalue = $('#id_section').attr('value');
+    categoryvalue = $('#id_category').attr('value');
+    
+    /*Highlights previously set entry , or sets choice to Uncategorized*/
+    if  (sectionvalue && categoryvalue) {
+        selecteditemvalue = sectionvalue + '-' + categoryvalue;
+        select(selecteditemvalue);
+    }
+    else {
+        selecteditemvalue = '-';
+        select(selecteditemvalue);
+    }
+    
+    /* Removes HiddenTreeWidget (category) Label */
     $(".hidden_tree").parent().children().eq(0).empty();
+    
     });
 </script>
