@@ -1,0 +1,47 @@
+<style type="text/css">
+    #{{ name }} {
+      font-family: Verdana, helvetica, arial, sans-serif;
+      font-size: 68.75%;
+      padding-left: 50px;
+    }
+    #{{ name }} li{
+        list-style-type: none;
+        cursor: pointer;
+    }
+    #{{ name }} li li:hover{
+        color: red;
+    }
+    #{{ name }} span.uncategorized:hover{
+        color: red;
+    }
+    #{{ name }} li{
+        list-style-type: none;
+    }
+    #{{ name }} ul {
+        margin-left: 0px;
+    }
+    .highlight{
+        color: blue;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#{{ name }}").treeview({
+            animated: "fast"
+        });
+      
+    $("#{{ name }} ul li span").click(select);
+    $("#{{ name }} li span[rel='0-0']").click(select);
+                                      
+    function select() {
+        $('.highlight').removeClass("highlight");
+        $(this).addClass("highlight");
+        rel = $(this).attr('rel');
+        ids = rel.split('-');
+        $('#id_section').attr('value', ids[0]);
+        $('#id_category').attr('value', ids[1]);
+    };
+    
+    $(".hidden_tree").parent().children().eq(0).empty();
+    });
+</script>
