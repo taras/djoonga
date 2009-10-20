@@ -36,7 +36,7 @@ class CategoryTreeWidget(Widget):
             output.append(u'<li><span class="folder">%s</span>'%section.title)
             output.append(render_categories(section.id))
             output.append(u'</li>')
-        output.append('</ul><input type="hidden" name="section" id="id_section" value="" id="id_section" />')
+        output.append('</ul><input type="hidden" name="section" id="id_section" value="%s" id="id_section" />'%data)
         return mark_safe(u'\n'.join(output))
 
 class CategoryTreeHiddenWidget(HiddenInput):
@@ -48,5 +48,5 @@ class CategoryTreeHiddenWidget(HiddenInput):
         super(CategoryTreeHiddenWidget, self).__init__(attrs)
 
     def render(self, name, value, attrs=None, choices=()):
-        output = ['<input class="hidden_tree" type="hidden" name="category" id="id_category" value="" id="id_category" />']
+        output = ['<input class="hidden_tree" type="hidden" name="category" value="%s" id="id_category" />'%value]
         return mark_safe(u'\n'.join(output))
