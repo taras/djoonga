@@ -1,0 +1,11 @@
+setup.cfg
+setup.py
+src/djoonga/__init__.py
+src/djoonga.deployment.egg-info/PKG-INFO
+src/djoonga.deployment.egg-info/SOURCES.txt
+src/djoonga.deployment.egg-info/dependency_links.txt
+src/djoonga.deployment.egg-info/entry_points.txt
+src/djoonga.deployment.egg-info/namespace_packages.txt
+src/djoonga.deployment.egg-info/not-zip-safe
+src/djoonga.deployment.egg-info/top_level.txt
+src/djoonga/deployment/__init__.py
