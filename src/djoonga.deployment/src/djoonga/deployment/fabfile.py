@@ -43,6 +43,51 @@ def backup():
     
     local('ln -f %s db/last'%backup_file_name)
 
+def restore():
+    '''
+    Restore mysql database from sql dump file.
+    '''
+    def listfiles(path):
+        a = [s for s in os.listdir(path)
+             if os.path.isfile(os.path.join(path, s))]
+        a.sort(key=lambda s: os.path.getmtime(os.path.join(path, s)))
+        return a
+    selected = None
+    backups = listfiles('db/backups')
+    if len(backups) > 1:
+        backups.insert(0, 'last')
+    while selected is None:
+        print 'Available backups (sorted by creation date):'
+        position = 0
+        for file in backups:
+            position += 1
+            name, ext = os.path.splitext(file)
+            print ' %s %s' % (position, name)
+        selected = prompt('Enter backup number to import: ')
+        if not selected.isdigit():
+            print 'Please enter a number between 1 and %s\n' % len(backups)
+            selected = None
+        elif int(selected) < 0 or int(selected) > len(backups):
+            print 'Please enter a number between 1 and %s\n' % len(backups)
+            selected = None
+    selected = int(selected)
+    if selected == 1:
+        path = 'db/last'
+    else:
+        path = os.path.join('db', 'backups', backups[selected-1])
+    mysqlimport(path)
+
+def mysqlimport(src):
+    '''
+    Run mysql import command
+    '''
+    require('dbhost')
+    require('dbname')
+    require('dbuser')
+    require('dbpassword')    
+    local('mysql --default_character_set=utf8 --host=%s --user=%s --pass="%s" %s < %s'%\
+        (env.dbhost, env.dbuser, env.dbpassword, env.dbname, src))
+
 def _set_db_settings():
     '''
     Load db settings
