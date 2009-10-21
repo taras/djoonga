@@ -1,5 +1,6 @@
 import os
-from djoonga.utils import jconfig
+import djoonga.utils
+jconfig = djoonga.utils.jconfig()
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -10,10 +11,10 @@ SITE_ID = 1
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'mysql'               # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = jconfig('db')
-DATABASE_USER = jconfig('user')         # Not used with sqlite3.
-DATABASE_PASSWORD = jconfig('password') # Not used with sqlite3.
-DATABASE_HOST = jconfig('host')         # Set to empty string for localhost. Not used with sqlite3.
+DATABASE_NAME = jconfig.db
+DATABASE_USER = jconfig.user         # Not used with sqlite3.
+DATABASE_PASSWORD = jconfig.password # Not used with sqlite3.
+DATABASE_HOST = jconfig.host         # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''                      # Set to empty string for default. Not used with sqlite3.
 
 TIME_ZONE = 'America/Chicago'
@@ -55,6 +56,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.admin',
+    'djoonga.utils',
     'djoonga.users',
     'djoonga.articles',
     'djoonga.categories',
@@ -70,5 +72,3 @@ TEMPLATE_DIRS = (
 )
 
 JOOMLA_SITEPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')), 'html')
-DJOONGA_CATEGORY_MODEL = ('categories', 'category')
-DJOONGA_SECTION_MODEL = ('categories', 'section')

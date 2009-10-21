@@ -20,7 +20,7 @@ setup(name='djoonga.utils',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          # -*- Extra requirements: -*-
+        'phpserialize == 1.2'
       ],
       entry_points="""
       # -*- Entry points: -*-
