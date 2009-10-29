@@ -14,5 +14,8 @@ src/djoonga/reports/__init__.py
 src/djoonga/reports/items.py
 src/djoonga/reports/pipelines.py
 src/djoonga/reports/settings.py
+src/djoonga/reports/commands/__init__.py
+src/djoonga/reports/commands/analyze.py
 src/djoonga/reports/spiders/__init__.py
-src/djoonga/reports/spiders/linkanalysis.py
+src/djoonga/reports/spiders/dropin.cache
+src/djoonga/reports/spiders/urlanalysis.py

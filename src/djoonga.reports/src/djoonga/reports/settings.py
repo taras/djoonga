@@ -24,3 +24,5 @@ COMMANDS_MODULE = 'djoonga.reports.commands'
 SPIDER_MIDDLEWARES = {
     'scrapy.contrib.spidermiddleware.offsite.OffsiteMiddleware': None,
 }
+
+DUPEFILTER_CLASS = 'djoonga.reports.dupefilter.RequestRefererDupeFilter'

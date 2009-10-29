@@ -15,14 +15,14 @@ class URLAnalysisSpider(CrawlSpider):
     handle_httpstatus_list = [ 200, 404, 500 ]
     
     default_extractor = SgmlLinkExtractor(tags=['a','img'], attrs=['src', 'href'], \
-             unique=False, canonicalize=False)
+             unique=False, canonicalize=True)
     
     def start_requests(self):
         
         requests = []
         for url in self.start_urls:
             requests.append(Request(url, callback=self.parse,\
-                                    meta={'source_url':url, 'link_title':'',\
+                                    meta={'link_title':'',\
                                           'start_url':'true'}))
         
         return requests
@@ -35,19 +35,22 @@ class URLAnalysisSpider(CrawlSpider):
         items = []
         # store current page
         item = URLItem()
-        item['source'] = str(response.request.meta['source_url'])
+        if response.request.headers.has_key("Referer"):
+            item['source'] = str(response.request.headers["Referer"])
+        else:
+            item['source'] = ''
         item['link_title'] = str(response.request.meta['link_title'])
         item['status'] = int(response.status)
         item['url'] = str(response.request.url)
         items.append(item)
         
         # get links
-        if self.local(response.request.url) or response.request.meta['start_url'] == 'true':
+        if hasattr(response, 'encoding') and \
+        ( self.local(response.request.url) or response.request.meta['start_url'] == 'true' ):
             links = self.default_extractor.extract_links(response)
             for link in links:
                 items.append(Request(link.url, callback=self.parse,\
-                                     meta={'source_url':response.request.url,\
-                                           'link_title':link.text,\
+                                     meta={'link_title':link.text,\
                                            'start_url':'false'}))            
         return items
 
