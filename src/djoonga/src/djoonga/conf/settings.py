@@ -17,6 +17,9 @@ DATABASE_PASSWORD = jconfig.password # Not used with sqlite3.
 DATABASE_HOST = jconfig.host         # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''                      # Set to empty string for default. Not used with sqlite3.
 
+# Don't share this with anybody.
+SECRET_KEY = jconfig.secret
+
 TIME_ZONE = 'America/Chicago'
 
 LANGUAGE_CODE = 'en-us'
@@ -34,9 +37,6 @@ MEDIA_URL = '/media/'
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/admin_media/'
-
-# Don't share this with anybody.
-SECRET_KEY = 'muu%*h@*1y56=dheaaa8skk!i2m5u(%3d&mytla7phzp2f00gw'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -56,10 +56,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.admin',
-    'djoonga.utils',
-    'djoonga.users',
-    'djoonga.articles',
-    'djoonga.categories',
 )
 
 TEMPLATE_LOADERS = (
@@ -70,5 +66,3 @@ TEMPLATE_LOADERS = (
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), "templates"),
 )
-
-JOOMLA_SITEPATH = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')), 'html')

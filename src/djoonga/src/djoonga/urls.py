@@ -9,11 +9,6 @@ handler500 # Pyflakes
 urlpatterns = patterns(
     '',
     (r'^admin/(.*)', admin.site.root),
-    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
-)
-
-urlpatterns += patterns('',
-    (r'^article/', include('djoonga.articles.urls')),
 )
 
 if settings.DEBUG:
