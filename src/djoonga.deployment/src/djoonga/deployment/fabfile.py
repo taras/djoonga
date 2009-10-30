@@ -77,7 +77,11 @@ def _select_backup(src='db'):
         return None, None
 
     if 'last' in backups:
-        last = os.readlink(os.path.join(src, 'last'))
+        f = open(os.path.join(src, 'last'), 'r')
+        last = _md5sum(f)
+        f.close()
+    else:
+        last = None
 
     while selected is None:
         print 'Available backups (sorted by creation date):'
@@ -85,7 +89,10 @@ def _select_backup(src='db'):
         for file in backups:
             position += 1
             name, ext = os.path.splitext(file)
-            if last == file:
+            f = open(os.path.join(src, file), 'r')
+            current = _md5sum(f)
+            f.close()
+            if last == current and file != 'last':
                 print ' %s %s (last)' % (position, name)
             else:
                 print ' %s %s' % (position, name)                
@@ -96,9 +103,25 @@ def _select_backup(src='db'):
         elif int(selected) < 0 or int(selected) > len(backups):
             print 'Please enter a number between 1 and %s\n' % len(backups)
             selected = None
-    backup_name = backups[selected]
+    backup_name = backups[int(selected)-1]
     env.backup = (backup_name, os.path.join(src, backup_name))
     return env.backup
+
+def _md5sum(file):
+    """Calculate the md5 checksum of a file-like object without reading its
+    whole content in memory.
+
+    >>> from StringIO import StringIO
+    >>> md5sum(StringIO('file content to hash'))
+    '784406af91dd5a54fbb9c84c2236595a'
+    """
+    m = hashlib.md5()
+    while 1:
+        d = file.read(8096)
+        if not d:
+            break
+        m.update(d)
+    return m.hexdigest()
 
 def restore():
     '''
