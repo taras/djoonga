@@ -1,3 +1,6 @@
 
       # -*- Entry points: -*-
+      [console_scripts]
+      development=djoonga.main:development
+      production=djoonga.main:production
       

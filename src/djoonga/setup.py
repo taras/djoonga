@@ -19,8 +19,12 @@ setup(name='djoonga',
       zip_safe=False,
       install_requires=[
           # -*- Extra requirements: -*-
+          'Django >=1.1',
       ],
       entry_points="""
       # -*- Entry points: -*-
+      [console_scripts]
+      development=djoonga.main:development
+      production=djoonga.main:production
       """,
       )
