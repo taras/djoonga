@@ -1,6 +1,6 @@
 import os
-import djoonga.utils
-jconfig = djoonga.utils.jconfig()
+from djoonga.utils import jconfig
+jconfig = jconfig()
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -49,13 +49,16 @@ AUTHENTICATION_BACKENDS = (
     'djoonga.users.JoomlaAuthenticationBackend',
 )
 
-ROOT_URLCONF = ('joomla.urls')
+ROOT_URLCONF = ('djoonga.urls')
 
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.admin',
+    'djoonga.users',
+    'djoonga.articles',
+    'djoonga.categories',    
 )
 
 TEMPLATE_LOADERS = (

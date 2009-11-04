@@ -11,6 +11,7 @@ src/djoonga.reports.egg-info/paster_plugins.txt
 src/djoonga.reports.egg-info/requires.txt
 src/djoonga.reports.egg-info/top_level.txt
 src/djoonga/reports/__init__.py
+src/djoonga/reports/dupefilter.py
 src/djoonga/reports/items.py
 src/djoonga/reports/pipelines.py
 src/djoonga/reports/settings.py

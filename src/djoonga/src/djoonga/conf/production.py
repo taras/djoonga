@@ -1,2 +1,2 @@
 
-from joomla.settings import *
+from djoonga.conf.settings import *

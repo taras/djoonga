@@ -11,6 +11,7 @@ src/djoonga.users.egg-info/entry_points.txt
 src/djoonga.users.egg-info/namespace_packages.txt
 src/djoonga.users.egg-info/not-zip-safe
 src/djoonga.users.egg-info/paster_plugins.txt
+src/djoonga.users.egg-info/requires.txt
 src/djoonga.users.egg-info/top_level.txt
 src/djoonga/users/__init__.py
 src/djoonga/users/admin.py

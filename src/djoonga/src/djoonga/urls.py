@@ -9,9 +9,10 @@ handler500 # Pyflakes
 urlpatterns = patterns(
     '',
     (r'^admin/(.*)', admin.site.root),
+    (r'^accounts/login/$', 'django.contrib.auth.views.login'),    
 )
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-         (r'^media/(?P<path>.+)$', 'media_utils.views.serve_app_media')
+        (r'^media/(?P<path>.+)$', 'media_utils.views.serve_app_media'),
     )

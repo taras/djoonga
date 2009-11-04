@@ -8,6 +8,7 @@ src/djoonga.categories.egg-info/entry_points.txt
 src/djoonga.categories.egg-info/namespace_packages.txt
 src/djoonga.categories.egg-info/not-zip-safe
 src/djoonga.categories.egg-info/paster_plugins.txt
+src/djoonga.categories.egg-info/requires.txt
 src/djoonga.categories.egg-info/top_level.txt
 src/djoonga/categories/__init__.py
 src/djoonga/categories/admin.py

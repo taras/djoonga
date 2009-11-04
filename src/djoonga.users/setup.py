@@ -21,6 +21,7 @@ setup(name='djoonga.users',
       zip_safe=False,
       install_requires=[
           # -*- Extra requirements: -*-
+          'djoonga',          
       ],
       entry_points="""
       # -*- Entry points: -*-

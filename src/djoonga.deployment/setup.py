@@ -21,6 +21,7 @@ setup(name='djoonga.deployment',
       zip_safe=False,
       install_requires=[
           # -*- Extra requirements: -*-
+          'djoonga',
       ],
       entry_points="""
       # -*- Entry points: -*-

@@ -20,6 +20,7 @@ setup(name='djoonga',
       install_requires=[
           # -*- Extra requirements: -*-
           'Django >=1.1',
+          'phpserialize >= 1.2'
       ],
       entry_points="""
       # -*- Entry points: -*-
