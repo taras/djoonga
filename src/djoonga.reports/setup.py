@@ -5,9 +5,8 @@ version = '0.1'
 
 setup(name='djoonga.reports',
         version=version,
-        description="",
-        long_description="""\
-    """,
+        description="CLI tool that scrapes a website and generates a file of all links on a site.",
+        long_description=open('README.rst').read(),
         classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
         keywords='',
         author='Taras Mankovski',
