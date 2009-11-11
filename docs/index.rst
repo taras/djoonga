@@ -21,19 +21,28 @@ First steps
 ===========
 
 .. toctree::
-        :hidden:
-        
-        intro/overview
-        intro/install
-        intro/tutorial
-
+    :hidden:
+    
+    intro/overview
+    intro/install
+    intro/tutorial
+    
 :doc:`intro/overview`
-        Understand what Djoonga is and how it can help you.
+    Get a quick introduction to Djoonga.
 
 :doc:`intro/install`
-        Get Djoonga installed on your computer.
+    Get Djoonga installed on your computer.
 
 :doc:`intro/tutorial`
-        Implement your first Djoonga setup
+    Implement your first Djoonga setup
 
+Basics
+==============
+
+.. toctree::
+    
+    basics/project_layout
+
+:doc:`basics/project_layout`
+    
 
