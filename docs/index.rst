@@ -26,6 +26,15 @@ First steps
     intro/overview
     intro/install
     intro/tutorial
+
+    basics/project_layout
+    
+    deployment/hosting
+    deployment/production
+    
+    tools/buildout
+    tools/fabric
+    
     
 :doc:`intro/overview`
     Get a quick introduction to Djoonga.
@@ -37,12 +46,31 @@ First steps
     Implement your first Djoonga setup
 
 Basics
-==============
-
-.. toctree::
-    
-    basics/project_layout
+======
 
 :doc:`basics/project_layout`
-    
+    Learn about Djoonga project layout.
 
+:doc:`basics/process`
+    Learn about Djoonga development process
+
+Deployment
+==========
+
+:doc:`deployment/hosting`
+    Learn about Hosts who support Djoonga
+
+:doc:`deployment/production`
+    Learn how to run Djoonga in production environment.
+
+Tools
+=====
+
+:doc:`tools/buildout`
+    Systematic and reliable Python package management tool.
+
+:doc:`tools/fabric`
+    Save time and reduce errors by using Fabric deployment tool. 
+    
+:doc:`tools/vcs`
+    User a Version Control System and never loose code again
