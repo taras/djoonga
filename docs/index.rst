@@ -9,7 +9,7 @@ Djoonga Documentation
 Having trouble? We'd like to help!
 
 * Looking for specific information? Try the :ref:`genindex` or :ref:`modindex`.
-* Search for information in the `archives of the scrapy-users mailing list`_, or
+* Search for information in the `archives of djoonga-users mailing list`_, or
   `post a question`_.
 * Report bugs with Scrapy in our `ticket tracker`_.
 
@@ -25,15 +25,20 @@ First steps
     
     intro/overview
     intro/install
-    intro/tutorial
+    
+    tutorials/existing
+    tutorials/new
 
     basics/project_layout
+    basics/process
     
     deployment/hosting
     deployment/production
+    deployment/fabfile
     
     tools/buildout
     tools/fabric
+    tools/vcs
     
     
 :doc:`intro/overview`
@@ -42,35 +47,44 @@ First steps
 :doc:`intro/install`
     Get Djoonga installed on your computer.
 
-:doc:`intro/tutorial`
-    Implement your first Djoonga setup
-
 Basics
 ======
 
-:doc:`basics/project_layout`
+:doc:`Project Layout <basics/project_layout>`
     Learn about Djoonga project layout.
 
-:doc:`basics/process`
+:doc:`Process <basics/process>`
     Learn about Djoonga development process
+
+Tutorials
+=========
+
+:doc:`New Project <tutorials/new>`
+    Create new project using Djoonga
+
+:doc:`Existing Project <tutorials/existing>`
+    Add Djoonga to existing Joomla
 
 Deployment
 ==========
 
-:doc:`deployment/hosting`
+:doc:`Hosting <deployment/hosting>`
     Learn about Hosts who support Djoonga
 
-:doc:`deployment/production`
+:doc:`To Production <deployment/production>`
     Learn how to run Djoonga in production environment.
+
+:doc:`Fabric Functions <deployment/fabfile>`
+    Learn about available Fabric functions
 
 Tools
 =====
 
-:doc:`tools/buildout`
+:doc:`Buildout <tools/buildout>`
     Systematic and reliable Python package management tool.
 
-:doc:`tools/fabric`
+:doc:`Fabric <tools/fabric>`
     Save time and reduce errors by using Fabric deployment tool. 
     
-:doc:`tools/vcs`
-    User a Version Control System and never loose code again
+:doc:`Version Control System <tools/vcs>`
+    Use a Version Control System and never loose code again.

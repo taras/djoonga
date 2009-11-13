@@ -1,8 +1,8 @@
 .. _tutorial
 
-========
-Tutorial
-========
+==================================
+Add Djoonga to an Existing Project
+==================================
 
 * This tutorial will show you how to add Django to an existing Joomla website.
 * This tutorial assumes that Djoonga is installed on your development machine.
@@ -61,12 +61,17 @@ Initialize
 
 Next, let's initialize Djoonga project inside of your project directory.::
 
-    cd ~/Sites/csi
-    djoonga-admin.py init
-
-A prompt will come up asking for path to Joomla! configuration file. ::
-
-    Enter path to Joomla! configuration.php file (Default: html/configuration.php)
+    # cd ~/Sites/csi
+    # djoonga-admin.py init
+    # Install Joomla!? (Y/n) : n
+    # Enter path to configuration.php (html/configuration.php):
+    Created admin/__init_.py
+    Created admin/urls.py
+    Created admin/settings.py
+    Created admin/development.py
+    Created admin/production.py
+    Created buildout.cfg
+    Created fabfile.py
 
 djoonga-admin's init command creates **admin** directory inside of your project
 directory. Let's look closer at what was created.
