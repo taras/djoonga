@@ -1,6 +1,8 @@
 README.rst
 setup.cfg
 setup.py
+dist/djoonga.reports-0.1dev.tar.gz
+dist/djoonga.reports-0.1final.tar.gz
 src/djoonga/__init__.py
 src/djoonga.reports.egg-info/PKG-INFO
 src/djoonga.reports.egg-info/SOURCES.txt

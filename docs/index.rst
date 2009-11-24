@@ -6,12 +6,14 @@
 Djoonga Documentation
 =====================
 
+Djoonga is an open source 
+
 Having trouble? We'd like to help!
 
 * Looking for specific information? Try the :ref:`genindex` or :ref:`modindex`.
 * Search for information in the `archives of djoonga-users mailing list`_, or
   `post a question`_.
-* Report bugs with Scrapy in our `ticket tracker`_.
+* Report bugs with Djoona in our `ticket tracker`_.
 
 .. _archives of djoonga-users mailing list: http://groups.google.com/group/djoonga-users
 .. _post a question: http://groups.google.com/group/djoonga-users
@@ -79,6 +81,9 @@ Deployment
 
 Tools
 =====
+
+:doc:`Cli <tools/cli>`
+    Learn about command line interface.
 
 :doc:`Buildout <tools/buildout>`
     Systematic and reliable Python package management tool.

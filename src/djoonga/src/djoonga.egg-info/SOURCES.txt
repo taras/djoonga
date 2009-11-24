@@ -2,6 +2,7 @@ setup.cfg
 setup.py
 src/djoonga/__init__.py
 src/djoonga/main.py
+src/djoonga/tests.py
 src/djoonga/urls.py
 src/djoonga.egg-info/PKG-INFO
 src/djoonga.egg-info/SOURCES.txt
@@ -17,4 +18,3 @@ src/djoonga/conf/production.py
 src/djoonga/conf/settings.py
 src/djoonga/utils/__init__.py
 src/djoonga/utils/exceptions.py
-src/djoonga/utils/tests.py
