@@ -5,17 +5,7 @@ Overview
 ========
 Djoonga is Python tool, designed to simplify the everyday tasks of a
 Joomla developer. It brings together the best aspects of Joomla! CMS and Django
-Web Development Framework to leverage the unique advantages and together make
-possible what was not possible previously.
-
-What can Djoonga do for you?
-========================
-Djoonga can help you provide a more professional and reliable Joomla service.
-Joomla is a great starting point, but it's not enough. After building a bunch of
-sites for clients and realizing that it never ends, you will start asking
-yourself, What can I do better? How can I make more money and do less work? 
-How can i offer a better service while simplifying my life, well Djoonga help
-you get all these.
+Web Development Framework to leverage the unique advantages of each system.
 
 What's so special about Djoonga?
 ================================

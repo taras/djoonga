@@ -53,36 +53,20 @@ many occassions. I will include some links to additional information on this
 subject.
 
 Subversion (SVN)
-    * Subversion, usually reffered to as SVN, is a centralized version control
-    system. Which means that there is a central server that stores the repository
-    and everyone else connects to it to download and upload code changes.
-    * The central server is the only node in the system that contains all of the
-    revision history. The SVN clients only have the `working set` and query the
-    central server for all other information.
-    * Subversion is linear, which means that if you are working on something you
-    either have to commit everything or nothing at all. Alternatively, you can
-    create a branch and make your changes in the branch, but branching in
-    subversion is essentially copying, which can be slow on big projects.
+    * Subversion, usually reffered to as SVN, is a centralized version control system. Which means that there is a central server that stores the repository and everyone else connects to it to download and upload code changes.
+    * The central server is the only node in the system that contains all of the revision history. The SVN clients only have the `working set` and query the central server for all other information.
+    * Subversion is linear, which means that if you are working on something you either have to commit everything or nothing at all. Alternatively, you can create a branch and make your changes in the branch, but branching in subversion is essentially copying, which can be slow on big projects.
 
 Git
-    * Git is a `Distributed Version Control System` (DVCS) which means that it
-    was designed to be used by many different developers without a centralized
-    server. The advantages over SVN is that it's FAST. It's VERY VERY FAST.
-    But it's more complicated and takes longer to learn.
-    * Unlike SVN, Git has really great branch handling. Creating, switching
-    and working with branches is very fast.
-    * Git has stash command, which gives it a huge advantage over other VSCs.
-    stash allows to put away the changes that you're working on, so if you
-    are in the middle of something and a client finds a bug on the site, you
-    can fix it without impacting what you're working on.
+    * Git is a `Distributed Version Control System` (DVCS) which means that it was designed to be used by many different developers without a centralized server. The advantages over SVN is that it's FAST. It's VERY VERY FAST. But it's more complicated and takes longer to learn.
+    * Unlike SVN, Git has really great branch handling. Creating, switching and working with branches is very fast.
+    * Git has stash command, which gives it a huge advantage over other VSCs. stash allows to put away the changes that you're working on, so if you are in the middle of something and a client finds a bug on the site, you can fix it without impacting what you're working on.
 
 .. _Distributed Versio Control System: http://en.wikipedia.org/wiki/Distributed_revision_control    
 
 Mercurial
-    * Mercurial is also a DVCS. It's not as fast as Git, but I hear it's easier
-    to learn.
-    * I don't use Mercurial, so, I don't have much to say about it. If someone
-    can contribute information to this section, I would be happy to add it.
+    * Mercurial is also a DVCS. It's not as fast as Git, but I hear it's easier to learn.
+    * I don't use Mercurial, so, I don't have much to say about it. If someone can contribute information to this section, I would be happy to add it.
 
 How do I setup a repository?
 ============================

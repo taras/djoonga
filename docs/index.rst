@@ -1,23 +1,8 @@
-.. Djoonga documentation master file, created by sphinx-quickstart on Tue Nov  3 21:40:23 2009.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 =====================
 Djoonga Documentation
 =====================
 
 Djoonga is an open source 
-
-Having trouble? We'd like to help!
-
-* Looking for specific information? Try the :ref:`genindex` or :ref:`modindex`.
-* Search for information in the `archives of djoonga-users mailing list`_, or
-  `post a question`_.
-* Report bugs with Djoona in our `ticket tracker`_.
-
-.. _archives of djoonga-users mailing list: http://groups.google.com/group/djoonga-users
-.. _post a question: http://groups.google.com/group/djoonga-users
-.. _ticket tracker: http://github.com/taras/djoonga/issues
 
 First steps
 ===========
@@ -26,6 +11,7 @@ First steps
     :hidden:
     
     intro/overview
+    apps/index
     intro/install
     
     tutorials/existing
@@ -46,8 +32,12 @@ First steps
 :doc:`intro/overview`
     Get a quick introduction to Djoonga.
 
+:doc:`Applications <apps/index>`
+    Learn about Apps that Djoonga comes with.
+
 :doc:`intro/install`
     Get Djoonga installed on your computer.
+
 
 Basics
 ======
@@ -93,3 +83,23 @@ Tools
     
 :doc:`Version Control System <tools/vcs>`
     Use a Version Control System and never loose code again.
+
+Support
+=======
+
+Having trouble? We'd like to help!
+
+* Looking for specific information? Try the :ref:`genindex` or :ref:`modindex`.
+* Search for information in the `archives of djoonga-users mailing list`_, or
+  `post a question`_.
+* Report bugs with Djoona in our `ticket tracker`_.
+
+.. _archives of djoonga-users mailing list: http://groups.google.com/group/djoonga-users
+.. _post a question: http://groups.google.com/group/djoonga-users
+.. _ticket tracker: http://github.com/taras/djoonga/issues
+
+Development
+===========
+
+:doc:`Roadmap <development/roadmap>`
+    Learn about the future of Djoonga.
