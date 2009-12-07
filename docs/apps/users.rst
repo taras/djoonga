@@ -1,5 +1,8 @@
-.. _users
+.. _users_app
 
 ============================
 Djoonga Users Application
 ============================
+
+.. automodule:: djoonga.contrib.users
+

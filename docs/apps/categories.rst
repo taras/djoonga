@@ -1,5 +1,7 @@
-.. _categories
+.. _categories_app
 
 ============================
 Djoonga Categories Application
 ============================
+
+.. automodule:: djoonga.contrib.categories

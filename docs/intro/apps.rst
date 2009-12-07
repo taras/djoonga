@@ -4,17 +4,6 @@
 Djoonga Core Applications
 =========================
 
-.. toctree::
-    :hidden:
-    
-    /apps/articles
-    /apps/contacts
-    /apps/links
-    /apps/categories
-    
-    /apps/users
-    /apps/menus
-
 Content
     * :doc:`Articles </apps/articles>`
     * :doc:`Contacts </apps/contacts>`

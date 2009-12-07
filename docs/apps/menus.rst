@@ -1,5 +1,7 @@
-.. _menus
+.. _menus_app
 
 ============================
 Djoonga Menus Application
 ============================
+
+.. automodule:: djoonga.contrib.menus

@@ -1,3 +1,30 @@
+.. toctree::
+    :hidden:
+    :maxdepth: 1
+    
+    intro/overview
+    intro/apps
+    intro/install
+    tutorials/existing
+    tutorials/new
+    basics/project_layout
+    basics/process
+    deployment/hosting
+    deployment/production
+    deployment/fabfile
+    tools/cli
+    tools/buildout
+    tools/fabric
+    tools/vcs
+    apps/articles
+    apps/categories
+    apps/contacts
+    apps/links
+    apps/menus
+    apps/users
+    development/roadmap
+    
+
 =====================
 Djoonga Documentation
 =====================
@@ -6,33 +33,12 @@ Djoonga is an open source
 
 First steps
 ===========
-
-.. toctree::
-    :hidden:
-    
-    intro/overview
-    apps/index
-    intro/install
-    
-    tutorials/existing
-    tutorials/new
-
-    basics/project_layout
-    basics/process
-    
-    deployment/hosting
-    deployment/production
-    deployment/fabfile
-    
-    tools/buildout
-    tools/fabric
-    tools/vcs
     
     
 :doc:`intro/overview`
     Get a quick introduction to Djoonga.
 
-:doc:`Applications <apps/index>`
+:doc:`Applications <intro/apps>`
     Learn about Apps that Djoonga comes with.
 
 :doc:`intro/install`

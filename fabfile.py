@@ -1,4 +1,6 @@
+from __future__ import with_statement
 from fabric.api import local, run, sudo, env, require
+from fabric.context_managers import show
 from fabric.contrib.project import rsync_project
 
 def live():
@@ -13,7 +15,7 @@ def build():
 	'''
 	Run sphinx build command on docs directory
 	'''
-	local('make -C docs/ html')
+	print local('./bin/sphinx-build -a -E docs/ docs/.build/html', capture=False)
 
 def upload():
 	'''

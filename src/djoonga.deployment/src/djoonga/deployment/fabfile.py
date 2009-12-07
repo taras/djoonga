@@ -43,14 +43,44 @@ def get_settings(host=None, name=None, user=None, password=None):
         password = env.dbpass
     return host, name, user, password
 
+def schema():
+    '''
+    Environment setting function to enable only schema export.
+    Use this comamnd before restore command if you do not want to export data.
+    '''
+    env.schema_only = True
+
+def data():
+    '''
+    Environment settings function to enable only data export
+    Use this command before restore command if you do not want to export schema.
+    '''
+    env.data_only = True
+
+def xml():
+    '''
+    Environment settings functions to enable xml export
+    '''
+    env.xml = True
+
 def mysqldump(host=None, name=None, user=None, password=None):
     '''
     Run mysqldump and return the result
     '''
+    
+    if hasattr(env, 'schema_only') and env.schema_only:
+        export = '--no-data'
+    elif hasattr(env, 'data_only') and env.data_only:
+        export = '--no-create-info'
+    else:
+        export = '' 
+    if hasattr(env, 'xml') and env.xml:
+        export ='%s %s'%(export, '--xml')
+    
     host, name, user, password = get_settings(host=host, name=name, user=user, password=password)
     return run('mysqldump --host=%s --user=%s --password=%s %s --quick \
-               --lock-tables --add-drop-table'% \
-               (host, user, password, name))
+               --lock-tables --add-drop-table %s'% \
+               (host, user, password, name, export))
 
 def _prompt_for_backup_name(base_path='db', ext='.sql'):
     '''
