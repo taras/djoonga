@@ -1,0 +1,12 @@
+setup.cfg
+setup.py
+src/djoonga/__init__.py
+src/djoonga.recipe.joomla.egg-info/PKG-INFO
+src/djoonga.recipe.joomla.egg-info/SOURCES.txt
+src/djoonga.recipe.joomla.egg-info/dependency_links.txt
+src/djoonga.recipe.joomla.egg-info/entry_points.txt
+src/djoonga.recipe.joomla.egg-info/namespace_packages.txt
+src/djoonga.recipe.joomla.egg-info/not-zip-safe
+src/djoonga.recipe.joomla.egg-info/top_level.txt
+src/djoonga/recipe/__init__.py
+src/djoonga/recipe/joomla/__init__.py

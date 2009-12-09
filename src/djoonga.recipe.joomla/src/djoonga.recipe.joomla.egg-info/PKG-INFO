@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: djoonga.recipe.joomla
+Version: 0.1dev
+Summary: Buildout recipe for intalling and updating Joomla! sites
+Home-page: http://github.com/taras/djoonga/src/djoonga.recipe.joomla
+Author: Taras Mankovski
+Author-email: taras@positivesum.org
+License: GNU General Public License
+Description: UNKNOWN
+Keywords: joomla djoonga buildout recipe
+Platform: UNKNOWN
