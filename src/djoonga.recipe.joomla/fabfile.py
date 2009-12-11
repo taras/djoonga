@@ -1,13 +1,17 @@
 from fabric.api import local, abort
+from fabric.contrib.console import confirm
 from distutils.version import StrictVersion
+import hashlib
 import os
 
 # what directories or files to exclude from diff?
 exclude = ['installation', '.svn']
 base = os.path.join('parts', 'joomla')
-output = os.path.join('src', 'djoonga', 'recipe', 'joomla')
 
-def sort(versions):
+def _sort(versions):
+    '''
+    Return a sorted list of Joomla versions
+    '''
     
     def find_key(dic, val):
         """return the key of dictionary dic given the value"""
@@ -88,7 +92,7 @@ def test():
                 '1.5.1', '1.5.2', '1.5.3', '1.5.4', '1.5.5', '1.5.6',\
                 '1.5.7', '1.5.8', '1.5.9', '1.5.10', '1.5.11', '1.5.12RC', \
                 '1.5.12',  '1.5.13', '1.5.14', '1.5.15']
-    assert sort(versions) == sorted, 'Expected %s, got %s' % (sorted, sort(versions))
+    assert _sort(versions) == sorted, 'Expected %s, got %s' % (sorted, _sort(versions))
 
 def base_path(version):
     '''
@@ -116,11 +120,54 @@ def generate_patches(joomla='1.5'):
         abort('Files for requested version of Joomla do not exist in %s'%source)
     
     versions = [v for v in os.listdir(source) if v not in exclude]
-    sorted = sort(versions)
+    sorted = _sort(versions)
     
     last = sorted[-1]
     old = sorted[0:-1]
     old.reverse()
     for v in old:
         print diff_cmd(v, last)
+        
+def build_latest():
+    '''
+    Create archive of latest distributions of parts/joomla
+    and store them in ../../joomla
+    '''
+    
+    # path to location of tags from joomla svn repository
+    joomla_tags = os.path.join('parts','joomla')
+    
+    # output directory where created files will be stored
+    output = os.path.abspath(os.path.join('..','..','joomla'))
+
+    # for each major version generate latest archive
+    for major_version in os.listdir(joomla_tags):
+        version_dir = os.path.join(joomla_tags, major_version)
+        # get list of all versions, exclude .svn
+        versions = [v for v in os.listdir(version_dir) if v not in exclude]
+        sorted = _sort(versions)
+        latest = sorted[-1]
+        output_dir = os.path.join(output, major_version)
+        if not os.path.exists(output_dir):
+            os.mkdir(output_dir)
+        latest_output = os.path.join(output, major_version, 'latest.tar.gz')
+        source = os.path.join(version_dir, latest)
+
+        # create archive
+        local('tar --exclude=.svn --directory=%s -pczf %s .'%(source, latest_output))
+        
+        # genereate MD5 hash for generated file
+        f = open(latest_output, 'rb')
+        hash = hashlib.md5()
+        hash.update(f.read())
+        hash = hash.hexdigest()
+        f.close()
+        
+        f = open(os.path.join(output, major_version, 'CHECKSUM'), 'w')
+        f.write(hash)
+        f.close()
+        
+        f = open(os.path.join(output, major_version, 'VERSION'), 'w')
+        f.write(latest)
+        f.close()
         
