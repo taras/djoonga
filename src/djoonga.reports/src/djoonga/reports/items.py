@@ -10,3 +10,4 @@ class URLItem(Item):
     source = Field()
     status = Field()
     link_title = Field()
+    reports = Field(default=[])

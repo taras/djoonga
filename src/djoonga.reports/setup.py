@@ -19,7 +19,8 @@ setup(name='djoonga.reports',
         include_package_data=True,
         zip_safe=False,
         install_requires=[
-            'scrapy==0.7'
+            'scrapy==0.7',
+            'simplejson'
         ],
         entry_points="""
         # -*- Entry points: -*-

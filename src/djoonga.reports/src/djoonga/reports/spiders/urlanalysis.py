@@ -42,6 +42,20 @@ class URLAnalysisSpider(CrawlSpider):
         item['link_title'] = str(response.request.meta['link_title'])
         item['status'] = int(response.status)
         item['url'] = str(response.request.url)
+        if item['status'] > 400:
+            item['reports'].append('errors')
+
+        if 'index.php' in item['url']:
+            item['reports'].append('dirtyurls')
+
+        if not self.local(item['url']):
+            item['reports'].append('offsite')
+
+        if len(item['reports']) > 1 and 'clean' in item['reports']:
+            item['reports'].remove('clean')
+        elif len(item['reports']) == 0:
+            item['reports'].append('clean')
+            
         items.append(item)
         
         # get links
