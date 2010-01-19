@@ -23,8 +23,12 @@ class JMenuItem(models.Model):
     lft = models.IntegerField()
     rgt = models.IntegerField()
     home = models.IntegerField()
+
     class Meta:
         db_table = u'%smenu'%jconfig.dbprefix
+
+    def __str__(self):
+        return '(%s) %s'%(self.id, self.name)
 
 class JMenu(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -33,3 +37,5 @@ class JMenu(models.Model):
     description = models.CharField(max_length=765)
     class Meta:
         db_table = u'%smenu_types'%jconfig.dbprefix
+    def __str__(self):
+        return '(%s) %s'%(self.id, self.title)

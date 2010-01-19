@@ -3,8 +3,8 @@ import subprocess
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from djoonga.users.models import JUser
-from djoonga.users.models import UserReference
+from models import JUser
+from models import UserReference
 
 class JoomlaAuthenticationBackend:
     def authenticate(self, username=None, password=None):

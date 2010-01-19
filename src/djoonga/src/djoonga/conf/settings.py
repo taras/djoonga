@@ -1,6 +1,5 @@
 import os
-from djoonga.utils import jconfig
-jconfig = jconfig()
+from djoonga.conf import jconfig
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -15,7 +14,7 @@ DATABASE_NAME = jconfig.db
 DATABASE_USER = jconfig.user         # Not used with sqlite3.
 DATABASE_PASSWORD = jconfig.password # Not used with sqlite3.
 DATABASE_HOST = jconfig.host         # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''                      # Set to empty string for default. Not used with sqlite3.
+DATABASE_PORT = '4040'               # Set to empty string for default. Not used with sqlite3.
 
 # Don't share this with anybody.
 SECRET_KEY = jconfig.secret
@@ -56,9 +55,11 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.admin',
-    'djoonga.users',
-    'djoonga.articles',
-    'djoonga.categories',    
+    'djoonga.contrib.users',
+    'djoonga.contrib.articles',
+    'djoonga.contrib.categories',
+    'djoonga.contrib.menus',
+    'djoonga.contrib.modules'
 )
 
 TEMPLATE_LOADERS = (

@@ -1,0 +1,1 @@
+from djoonga.test.config import JConfigTest
