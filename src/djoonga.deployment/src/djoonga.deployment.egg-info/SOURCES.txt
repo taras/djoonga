@@ -13,3 +13,5 @@ src/djoonga.deployment.egg-info/top_level.txt
 src/djoonga/deployment/__init__.py
 src/djoonga/deployment/fabfile.py
 src/djoonga/deployment/git.py
+src/djoonga/deployment/fabric/__init__.py
+src/djoonga/deployment/fabric/db.py
