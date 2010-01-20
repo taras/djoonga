@@ -6,6 +6,7 @@ from scrapy.contrib.loader import XPathItemLoader
 from urlparse import urlparse, urlunparse, urlsplit
 from scrapy.http import Request
 import os
+from scrapy import log
 
 class URLAnalysisSpider(CrawlSpider):
     
@@ -42,20 +43,30 @@ class URLAnalysisSpider(CrawlSpider):
         item['link_title'] = str(response.request.meta['link_title'])
         item['status'] = int(response.status)
         item['url'] = str(response.request.url)
-        if item['status'] > 400:
-            item['reports'].append('errors')
 
-        if 'index.php' in item['url']:
-            item['reports'].append('dirtyurls')
+        item['reports'] = []
+        
+        def add(item, report):
+            if not report in item['reports']:
+                item['reports'].append(report)
+            if report != 'clean' and 'clean' in item['reports']:
+                item['reports'].remove('clean')
+            return item
 
-        if not self.local(item['url']):
-            item['reports'].append('offsite')
+        if int(item['status']) > 400:
+            item = add(item, 'errors')
 
-        if len(item['reports']) > 1 and 'clean' in item['reports']:
-            item['reports'].remove('clean')
-        elif len(item['reports']) == 0:
-            item['reports'].append('clean')
-            
+        if 'index.php' in str(item['url']):
+            item = add(item, 'dirtyurls')
+
+        islocal = self.local(item['url'])
+        isalias = self.alias(item['url'])
+        if not islocal and not isalias:
+            item = add(item, 'offsite')
+
+        if len(item['reports']) == 0:
+            item = add(item, 'clean')
+
         items.append(item)
         
         # get links
