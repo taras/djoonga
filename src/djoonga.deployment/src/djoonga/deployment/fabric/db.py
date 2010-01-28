@@ -82,9 +82,11 @@ def mysqldump(host=None, name=None, user=None, password=None):
         export ='%s %s'%(export, '--xml')
 
     host, name, user, password = get_settings(host=host, name=name, user=user, password=password)
-    return run('mysqldump --host=%s --user=%s --password=%s %s --quick \
+    with settings(hide('warnings', 'running', 'stdout', 'stderr')):
+        dump = run('mysqldump --host=%s --user=%s --password=%s %s --quick \
                --lock-tables --add-drop-table %s'% \
                (host, user, password, name, export))
+    return dump
 
 def last():
     '''
