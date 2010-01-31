@@ -72,9 +72,8 @@ def generate():
 
     os.mkdir(path(name))
 
-    fp = open(join(path(name), 'raw.diff'), 'w')
-    fp.writelines(changed)
-    fp.close()
+    with open(join(path(name), 'raw.diff'), 'w') as raw:
+        raw.writelines(changed)
     
     config = RawConfigParser()
     config.add_section('target')
