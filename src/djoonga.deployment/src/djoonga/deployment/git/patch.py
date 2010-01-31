@@ -7,10 +7,12 @@ import os
 import sys
 import fnmatch
 from git import Repo, Diff
-from fabric.api import prompt, put, run, abort, require, env, show, hide, local
+from fabric.api import prompt, put, run, abort, require, env, show, hide, local, abort
 from fabric.context_managers import settings, cd
 from fabric.contrib.console import confirm
 from fabric.contrib.files import append
+from ConfigParser import RawConfigParser
+from os.path import join, exists, splitext
 
 def deploy():
     '''
@@ -20,12 +22,15 @@ def deploy():
     3. Split patch into binary and text branch
     # TODO: Generate sql migration script
     4. Upload patch to server
-    5. Test the patch
+    5. Dryrun the patch
     6. Apply patch
     7. Perform actions on binary files
     '''
-    branch, patch, path = generate()
-    text_patch, binary_list = split(patch, branch.commit)
+    repo = Repo('.')
+    for branch in repo.branches:
+        if branch.name == 'master':
+            master = branch
+    patch, path = generate()
     apply(text_patch, binary_list)
 
 def prompt_branch_select(repo):
@@ -51,88 +56,37 @@ def generate():
     Generate patch for specific branch.
     '''
     repo = Repo('.')
-    name, selected = prompt_branch_select(repo)
+
+    if repo.is_dirty:
+        abort('Working tree is dirty. Working tree must be clean to perform this operation.')
+
+    name, selected_branch = prompt_branch_select(repo)
+
     for branch in repo.branches:
         if branch.name == 'master':
             master = branch
-    changed = local('git diff --binary %s %s'%(master.commit, selected.commit))
+    changed = local('git diff --binary %s %s'%(master.commit, selected_branch.commit))
 
-    def path(name):
-        return os.path.join('patches','%s.patch'%name.lower().strip(' '))
+    while exists(path(name)):
+        name = prompt('Directory already exists: %s.\nWhat should I call this patch?'%path(name))
 
-    patch = name
-    while os.path.exists(path(patch)):
-        patch = prompt('%s already exists. What should I call this patch?'%path(patch))
-    fp = open(path(patch), 'w')
+    os.mkdir(path(name))
+
+    fp = open(join(path(name), 'raw.diff'), 'w')
     fp.writelines(changed)
     fp.close()
-    return selected, patch, path
+    
+    config = RawConfigParser()
+    config.add_section('target')
+    config.add_section('iteration')
+    config.set('target', 'branch', master.name)
+    config.set('target', 'commit', master.commit)
+    config.set('iteration', 'branch', selected_branch.name)
+    config.set('iteration', 'commit', selected_branch.commit)
 
-def prompt_patch_select(path=os.path.join(os.getcwd(), 'patches'), intro='Available Patches'):
-    '''
-    Display a list of available patches in specified directory and prompt user to select
-    a patch by entering it's number in the list.
-    '''
-    selected = None
-    while selected is None:
-        print intro
-        pos = 0
-        patches = [os.path.splitext(p)[0] for p in os.listdir(path) if os.path.splitext(p)[1] == '.patch']
-        for patch in patches:
-            pos += 1
-            print ' %s - %s'%(pos, patch)
-        input = prompt("Enter patch number: ")
-        if input:
-            def valid(input):
-                if not input.isdigit():
-                    print '%s is not numeric'
-                    return False
-                if not int(input)-1 in range(0, len(patches)):
-                    print '%s is not a valid patch number' % str(int(input)-1)
-                    return False
-                return True
-            if valid(input):
-                selected = patches[int(input)-1]
-                print 'Selected %s'%selected
-                path = os.path.join(path, '%s.patch'%selected)
+    print("Generated %s patch directory."%name)
 
-    return selected, path
-
-def test():
-    '''
-    Uploads patch to the server and tests it
-    '''
-    print 'Available Patches'
-    for file in os.listdir('patches'):
-        name, ext = os.path.splitext(file)
-        if ext == '.patch':
-            print ' * %s'%name
-    patch = prompt('What patch would you like to test?')
-    path = os.path.join('patches','%s.patch'%patch)
-    if not path:
-        print '%s.patch does not exist in %s'(patch, os.path.abspath('patches'))
-        sys.exit()
-    remote = os.path.join('~', path)
-    put(path, remote)
-    run('patch --dry-run -p0 < %s'%remote)
-
-def split(patch=None, commit=None):
-    '''
-    Select a patch and split it in to 2 patches, one with text file differences
-    and one with binary file differences.
-    '''
-    if patch is None:
-        patch, path  = prompt_patch_select()
-    else:
-        path = os.path.join(os.getcwd(), 'patches', '%s.patch'%patch)
-        if not os.path.exists(path):
-            patch, path  = prompt_patch_select()
-
-    pf = open(path, 'r')
-    patch_text = pf.read()
-    pf.close()
-    repo = Repo('.')
-    diffs = Diff.list_from_string(repo, patch_text)
+    diffs = Diff.list_from_string(repo, changed)
 
     def filter(diff):
         def match(pattern):
@@ -150,100 +104,185 @@ def split(patch=None, commit=None):
     binary_ext = ['.png', '.gif', '.jpg', '.jpeg', '.flv', '.swf','.zip', '.gz', '.rar']
 
     # TODO: change this to use git generated binary marker
-    binaries = [diff for diff in diffs if os.path.splitext(diff.b_path)[1] in binary_ext]
+    binaries = [diff for diff in diffs if splitext(diff.b_path)[1] in binary_ext]
     text = set(diffs) - set(binaries)
 
+    config.add_section('patch')
+    config.set('patch', 'binary', len(binaries) > 0)
+    config.set('patch', 'text', len(text) > 0)
+
+    with open(join(path(name), 'patch.cfg'), 'wb') as configfile:
+        config.write(configfile)
+
+    print 'Generated patch config file'
+
     if text:
-        text_patch = os.path.join(os.getcwd(), 'patches', '%s.text.patch'%patch)
-        pf = open(text_patch, 'w')
-        for diff in text:
-            pf.write('%s\n\n'%diff.diff)
-        pf.close()
-        print 'Generated %s'%text_patch
+        text_patch = join(path(name), 'text.patch')
+        with open(text_patch, 'w') as pf:
+            for diff in text:
+                pf.write('%s\n\n'%diff.diff)
+        print 'Generated %s text patch'%name
     else:
         text_patch = None
 
     if binaries:
-        binary_list = os.path.join(os.getcwd(), 'patches', '%s.binaries.list'%patch)
-        binary_base = os.path.join(os.getcwd(), 'patches', '%s.binaries'%patch)
-        if not os.path.exists(binary_base):
-            os.mkdir(binary_base)
-        pf = open(binary_list, 'w')
-        for binary in binaries:
-            if not binary.b_commit is None:
-                dirs, file = os.path.split(binary.b_path)
-                try:
-                    os.makedirs(os.path.join(binary_base, dirs))
-                except:
-                    pass
-                with settings(show('stdout'), warn_only = True):
-                    local('git checkout %s %s'%(commit, binary.b_path))
-                    local('cp %s %s'%(os.path.join(os.getcwd(), binary.b_path), os.path.join(binary_base, dirs)))
-                    local('git reset HEAD %s'%binary.b_path)
-            if binary.new_file:
-                pf.write('new %s\n'%binary.b_path)
-            elif binary.deleted_file:
-                pf.write('rm %s\n'%binary.b_path)
-            elif binary.renamed:
-                pf.write('mv %s %s\n'%(binary.a_path, binary.b_path))
-            else:
-                pf.write('up %s\n'%binary.b_path)
-        pf.close()
+        binary_list = join(path(name), 'binary.changes')
+        binary_base = join(path(name), 'binaries')
+        os.mkdir(binary_base)
+        with open(binary_list, 'w') as pf:
+            for binary in binaries:
+                def mkdirs(path):
+                    path = join(binary_base, path)
+                    try:
+                        os.makedirs(path)
+                    except:
+                        pass
+                    return path
+                def extractfile(commit, path):
+                    dirs, file = os.path.split(path)
+                    dirs = mkdirs('%s/%s'%(commit, dirs))
+                    with settings(show('stdout'), warn_only = True):
+                        if commit == 'target':
+                            commit_id = master.commit
+                        else:
+                            commit_id = selected_branch.commit
+                        local('git checkout %s %s'%(commit_id, path))
+                        local('mv %s %s'%(join(os.getcwd(), path), join(binary_base, dirs)))
+                        local('git reset HEAD --hard')
+                if binary.a_commit is None:
+                    # new file is being created
+                    extractfile('iteration', binary.b_path)
+                elif binary.b_commit is None:
+                    # file is being removed
+                    extractfile('target', binary.a_path)
+                else:
+                    # file is being updated or renamed
+                    extractfile('target', binary.a_path)
+                    extractfile('iteration', binary.b_path)
+
+                if binary.new_file:
+                    pf.write('new %s\n'%binary.b_path)
+                elif binary.deleted_file:
+                    pf.write('rm %s\n'%binary.b_path)
+                elif binary.renamed:
+                    pf.write('mv %s %s\n'%(binary.a_path, binary.b_path))
+                else:
+                    pf.write('up %s\n'%binary.b_path)
+                    
         print 'Generated %s'%binary_list
     else:
         binary_list = None
 
-    return text_patch, binary_list
+    return name, path(name)
 
-def apply(text=None, binary=None, commit=None):
+def prompt_patch_select(intro='Available Patches'):
+    '''
+    Display a list of available patches in specified directory and prompt user to select
+    a patch by entering it's number in the list.
+    '''
+    selected = None
+    while selected is None:
+        print intro
+        pos = 0
+        patches = [d for d in os.listdir(path('')) if os.path.isdir(path(d))]
+        for patch in patches:
+            pos += 1
+            print ' %s - %s'%(pos, patch)
+        input = prompt("Enter patch number: ")
+        if input:
+            def valid(input):
+                if not input.isdigit():
+                    print '%s is not numeric'
+                    return False
+                if not int(input)-1 in range(0, len(patches)):
+                    print '%s is not a valid patch number' % str(int(input)-1)
+                    return False
+                return True
+            if valid(input):
+                selected = patches[int(input)-1]
+                print 'Selected %s'%selected
+
+    return selected
+
+def path(name):
+    '''
+    Returns path to patch directory of patch
+    '''
+    return join(os.getcwd(), 'patches', name.lower())
+
+def _remote(path):
+    '''
+    Returns path on remote server
+    '''
+    require('base')
+    return join(env.base, path)
+
+def _local(patch, commit, location):
+    '''
+    Returns path of binary from patch's binaries directory
+    '''
+    return join(path(patch), 'binaries', commit, location)
+
+def get_config(patch):
+    '''
+    Get config file for a patch
+    '''
+    config = RawConfigParser()
+    with open(join(path(patch), 'patch.cfg'), 'r') as configfp:
+        config.readfp(configfp)
+    return config
+
+def apply(patch=None):
     '''
     Apply a patch to remove server.
     '''
 
-    if text is None and binary is None:
-        patch, path  = prompt_patch_select()
+    if patch is None:
+        patch  = prompt_patch_select()
 
-        text = os.path.join(os.getcwd(), 'patches', '%s.text.patch'%patch)
-        binary = os.path.join(os.getcwd(), 'patches', '%s.binaries.list'%patch)
+    config = get_config(patch)
+    
+    if config.get('patch', 'text'):
+        patch_text(patch)
 
-    if not os.path.exists(text) and not os.path.exists(binary):
-        if prompt('Split patch file into text and binary patches?'):
-            text, binary = split(patch=patch)
-    else:
-        if os.path.exists(text):
-            base, text_patch = os.path.split(text)
-        else:
-            text = None
-        if not binary is None and os.path.exists(binary):
-            base, binary_list = os.path.split(binary)
-        else:
-            binary = None
-
-    require('base')
-    if not text is None:
-        put(text, env.base)
-        if confirm('Dry run patch?'):
-            with settings(show('stdout'), warn_only = True):
-                with cd(env.base):
-                    run('patch --dry-run -p1 < %s'%os.path.join(env.base, text_patch))
-        if confirm('Execute patch?'):
-            with settings(show('stdout'), warn_only = True):
-                with cd(env.base):
-                    run('patch -p1 < %s'%os.path.join(env.base, text_patch))
-                    log('Applied patch: %s'%text_patch)
-                    run('mv %s.patch patches'%text_patch)
-
-    if not binary is None:
-        binaries = open(binary, 'r').readlines()
+    if config.get('patch', 'binary'):
+        with open(join(path(patch), 'binary.changes'), 'r') as binarylist:
+            binaries = binarylist.readlines()
         for line in binaries:
             item = line.strip().split()
             if len(item) < 3:
                 item.append('')
-            {'rm':lambda a, b=None: run('rm %s'%os.path.join(env.base, a)),
-            'new':lambda a, b=None: put(os.path.join(os.getcwd(), a), os.path.join(env.base, a)),
-            'mv':lambda a,b=None: run('mv %s %s'%(os.path.join(env.base, a),os.path.join(env.base, b))),
-            'up':lambda a,b=None: put(os.path.join(os.getcwd(),a), os.path.join(env.base, a))
+            {'rm':lambda a, b=None: run('rm %s'%_remote(a)),
+            'new':lambda a, b=None: put(_local(patch, 'iteration', a), _remote(a)),
+            'mv':lambda a,b=None: run('mv %s %s'%(_remote(a),_remote(b))),
+            'up':lambda a,b=None: put(_local(patch, 'iteration', a), _remote(b))
             }[item[0]](item[1], item[2])
+
+def patch_text(patch, reverse=False):
+    '''Apply text patch to remote server.'''
+
+    def cmd(reverse, dry, path):
+        cmd = ['patch']
+        if dry: cmd.append('--dry-run')
+        if reverse: cmd.append('-R')
+        cmd.append('-p1')
+        cmd.append('<')
+        cmd.append(path)
+        return ' '.join(cmd)
+
+    require('base')
+    remotep = _remote('%s.patch'%patch)
+    put(join(path(patch), 'text.patch'), remotep)
+    if confirm('Dry run patch?'):
+        with settings(show('stdout'), warn_only = True):
+            with cd(env.base):
+                run(cmd(reverse, True, remotep))
+    if confirm('Execute patch?'):
+        with settings(show('stdout'), warn_only = True):
+            with cd(env.base):
+                run(cmd(reverse, False, remotep))
+                log('Applied text patch: %s'%patch)
+                run('mv %s patches'%remotep)
 
 def log(msg):
     '''
@@ -253,22 +292,29 @@ def log(msg):
         date = run('date')
         append('%s - %s'%(date, msg), '%s/%s'%(env.base,'.patch_history'))
 
-def reverse():
+def reverse(patch=None):
     '''
     Select patch and reverse it on remote server
     '''
-    patch, path  = prompt_patch_select()
 
-    require('base')
-    put(path, env.base)
-    if confirm('Dry run patch?'):
-        with settings(show('stdout'), warn_only = True):
-            with cd(env.base):
-                run('patch --dry-run -R -p1 < %s.patch'%os.path.join(env.base, patch))
-    if confirm('Execute patch?'):
-        with settings(show('stdout'), warn_only = True):
-            with cd(env.base):
-                reason = prompt("What's the reason for this action?: ")
-                run('patch -R -p1 < %s.patch'%os.path.join(env.base, patch))
-                log('Reversed patch: %s because %s'%(patch, reason))
-                run('mv %s.patch patches'%patch)
+    if patch is None:
+        patch = prompt_patch_select()
+
+    config = get_config(patch)
+
+    if config.get('patch', 'binary') and confirm('Reverse binary patch?'):
+        with open(join(path(patch), 'binary.changes'), 'r') as binarylist:
+            binaries = binarylist.readlines()
+
+        for line in binaries:
+            item = line.strip().split()
+            if len(item) < 3:
+                item.append('')
+            {'rm':lambda a, b=None: put(_local(patch, 'target', a), _remote(a)),
+            'new':lambda a, b=None: run('rm %s'%_remote(a)),
+            'mv':lambda a,b=None: run('mv %s %s'%(_remote(b),_remote(a))),
+            'up':lambda a,b=None: put(_local(patch, 'target', a), _remote(a))
+            }[item[0]](item[1], item[2])
+
+    if config.get('patch', 'binary') and confirm('Reverse text patch?'):
+        patch_text(patch, True)
