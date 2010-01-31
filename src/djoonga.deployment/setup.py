@@ -23,6 +23,7 @@ setup(name='djoonga.deployment',
       install_requires=[
           # -*- Extra requirements: -*-
           'djoonga',
+          'GitPython',
       ],
       entry_points="""
       # -*- Entry points: -*-
