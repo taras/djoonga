@@ -17,6 +17,8 @@ from fabric.context_managers import settings
 from djoonga.utils.decorators import deprecated
 from djoonga.utils import jconfig
 
+from djoonga.deployment.utils import md5sum
+
 def configure():
     '''
     Get database configurations from joomla config file and load them into
@@ -28,7 +30,7 @@ def configure():
     env.dbuser = config.user
     env.dbpass = config.password
     env.dbhost = config.host
-    
+
 def get_settings(host=None, name=None, user=None, password=None):
     '''
     Get settings from env or from parameters. Parameter settings get priority
@@ -120,8 +122,8 @@ def backup():
     '''
     env.backup = backup_name, backup_path = _prompt_for_backup_name()
 
-    output = mysqldump()
-    if output:
+    with settings(hide('warnings', 'running', 'stdout', 'stderr')):
+        output = mysqldump()
         fp = open(backup_path, 'w')
         fp.write(output)
         fp.close()
@@ -152,7 +154,7 @@ def _select_backup(src='db'):
 
     if 'last' in backups:
         f = open(os.path.join(src, 'last'), 'r')
-        last = _md5sum(f)
+        last = md5sum(f)
         f.close()
     else:
         last = None
@@ -164,7 +166,7 @@ def _select_backup(src='db'):
             position += 1
             name, ext = os.path.splitext(file)
             f = open(os.path.join(src, file), 'r')
-            current = _md5sum(f)
+            current = md5sum(f)
             f.close()
             if last == current and file != 'last':
                 print ' %s %s (last)' % (position, name)
@@ -180,22 +182,6 @@ def _select_backup(src='db'):
     backup_name = backups[int(selected)-1]
     env.backup = (backup_name, os.path.join(src, backup_name))
     return env.backup
-
-def _md5sum(file):
-    """Calculate the md5 checksum of a file-like object without reading its
-    whole content in memory.
-
-    >>> from StringIO import StringIO
-    >>> md5sum(StringIO('file content to hash'))
-    '784406af91dd5a54fbb9c84c2236595a'
-    """
-    m = hashlib.md5()
-    while 1:
-        d = file.read(8096)
-        if not d:
-            break
-        m.update(d)
-    return m.hexdigest()
 
 def restore(src=None, host=None, name=None, user=None, password=None):
     '''
@@ -246,14 +232,22 @@ def execute(query, host=None, name=None, user=None, password=None):
     return run("mysql --host='%s' --user='%s' --password='%s' -e '%s';"\
         %(host, user, password, query))
 
-def select_tables(name):
+def get_tables(name):
     '''
-    Prompt user to select list of tables from database
+    Return list of tables in specified database
     '''
     with settings(hide('warnings', 'running', 'stdout', 'stderr')):
         tables = execute("show tables in %s"%name)
 
-    tables = tables.split('\n')[1:-1]
+    return tables.split('\n')[1:-1]
+
+
+def select_tables(name):
+    '''
+    Prompt user to select list of tables from database
+    '''
+    tables = get_tables(name)
+    
     selected = []
     agreed = False
     while not agreed:

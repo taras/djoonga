@@ -24,6 +24,7 @@ setup(name='djoonga.deployment',
           # -*- Extra requirements: -*-
           'djoonga',
           'GitPython',
+          'Schema-Sync==0.9'
       ],
       entry_points="""
       # -*- Entry points: -*-

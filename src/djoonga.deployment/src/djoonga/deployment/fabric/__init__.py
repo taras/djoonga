@@ -4,7 +4,7 @@ __date__ ="$Jan 16, 2010 6:03:01 PM$"
 
 from fabric.api import env
 from fabric.state import _AttributeDict
-from djoonga.deployment.fabric import db
+from djoonga.deployment import db
 import getpass
 import os
 
