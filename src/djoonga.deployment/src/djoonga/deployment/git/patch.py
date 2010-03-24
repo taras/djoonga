@@ -29,12 +29,8 @@ def deploy():
     6. Apply patch
     7. Perform actions on binary files
     '''
-    repo = Repo('.')
-    for branch in repo.branches:
-        if branch.name == 'master':
-            master = branch
-    patch, path = generate()
-    apply(text_patch, binary_list)
+    patch = generate()
+    apply(patch)
 
 
 def generate():
@@ -46,11 +42,14 @@ def generate():
     if repo.is_dirty:
         abort('Working tree is dirty. Working tree must be clean to perform this operation.')
 
-    name, selected_branch = prompt_branch_select(repo)
+    if confirm('Use master as base?'):
+        for branch in repo.branches:
+            if branch.name == 'master':
+                master = branch
+    else:
+        branch, master = prompt_branch_select(repo, 'Select base branch')
 
-    for branch in repo.branches:
-        if branch.name == 'master':
-            master = branch
+    name, selected_branch = prompt_branch_select(repo)
 
     while exists(path(name)):
         name = prompt('Directory already exists: %s.\nWhat should I call this patch?'%path(name))
@@ -58,7 +57,7 @@ def generate():
     os.mkdir(path(name))
 
     rawpath = join(path(name), 'raw.diff')
-    local('git diff --binary %s %s > %s'%(master.commit, selected_branch.commit, rawpath))
+    local('git diff --binary %s %s > %s'%(selected_branch.commit, master.commit, rawpath))
 
     with open(rawpath, 'r') as raw:
         changed = raw.read()
@@ -188,7 +187,7 @@ def apply(patch=None):
 
     config = get_config(patch)
 
-    if config.getboolean('patch', 'text'):
+    if config.getboolean('patch', 'text') and confirm('Apply text patch?'):
         patch_text(patch)
 
     if config.getboolean('patch', 'binary'):
@@ -263,7 +262,7 @@ def patch_text(patch, reverse=False):
                 log('Applied text patch: %s'%patch)
                 run('mv %s patches'%remotep)
 
-def prompt_branch_select(repo):
+def prompt_branch_select(repo, question='What branch should I generate a patch for?'):
     '''
     Ask user to select a branch
     '''
@@ -273,7 +272,7 @@ def prompt_branch_select(repo):
         print 'Available branches:'
         for branch in repo.branches:
             print ' * %s' % branch.name
-        name = prompt('What branch should I generate a patch for?')
+        name = prompt(question)
         for branch in repo.branches:
             if name == branch.name:
                 selection = branch

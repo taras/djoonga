@@ -10,3 +10,4 @@ parts/
 debugger
 .installed.cfg
 docs/.build
+*.egg-info

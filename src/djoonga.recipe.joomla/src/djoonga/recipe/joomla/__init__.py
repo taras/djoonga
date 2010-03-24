@@ -18,6 +18,13 @@ class Joomla:
         '''
         Install Joomla! to a specific directory
         '''
+        
+        # download latest.tar.gz to tmp directory or repository directory
+        # extract latest.tar.gz to target directory
+        # import database
+        # create configuration file
+        # setup sef
+        
         path = self.options['path']
         logging.getLogger(self.name).info(
             'Creating directory %s', os.path.basename(path))

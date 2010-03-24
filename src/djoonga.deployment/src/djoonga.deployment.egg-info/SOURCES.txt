@@ -11,7 +11,9 @@ src/djoonga.deployment.egg-info/paster_plugins.txt
 src/djoonga.deployment.egg-info/requires.txt
 src/djoonga.deployment.egg-info/top_level.txt
 src/djoonga/deployment/__init__.py
-src/djoonga/deployment/fabfile.py
-src/djoonga/deployment/git.py
+src/djoonga/deployment/utils.py
+src/djoonga/deployment/db/__init__.py
+src/djoonga/deployment/db/patch.py
 src/djoonga/deployment/fabric/__init__.py
-src/djoonga/deployment/fabric/db.py
+src/djoonga/deployment/git/__init__.py
+src/djoonga/deployment/git/patch.py
